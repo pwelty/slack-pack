@@ -20,8 +20,8 @@ class Pocket {
 	private function post_something($url,$vars) {
 		$headers = array();
 		$headers['Content-Type'] = 'application/json; charset=UTF8';
-		// $headers['X-Accept'] = 'application/json';
-		$headers['X-Accept'] = 'application/x-www-form-urlencoded';
+		$headers['X-Accept'] = 'application/json';
+		// $headers['X-Accept'] = 'application/x-www-form-urlencoded';
 		$_headers = array();
 		foreach($headers as $k=>$v){
 			$_headers[] = $k.": ".$v;
