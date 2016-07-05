@@ -4,12 +4,14 @@ class Pocket {
 	// private $endpoint = 'https://getpocket.com/v3/oauth/request';
 	// private $redirect_uri = '';
 	private $consumer_key = '55686-b8c05db7247a1eb28a88120b';
-	private $token = '';
+	private $code = '';
 	private $headers;
+
 
 	function __construct($action) {
 		if ($action=='authorized') {
 			echo ("back");
+			$code=$_GET['code'];
 			$endpoint = 'https://getpocket.com/v3/oauth/authorize';
 			$vars = array();
 			$vars['consumer_key'] = $this->consumer_key;
@@ -26,7 +28,10 @@ class Pocket {
 			// echo ("end 1");
 			// $this->r($response);
 			$code = $response->code;
-			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.urlencode('https://boiling-spire-90759.herokuapp.com/index.php?action=authorized');
+			// echo ($code);
+			// exit;
+			$this->code = $code;
+			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.urlencode('https://boiling-spire-90759.herokuapp.com/index.php?action=authorized&code='.$code);
 			header('Location: '.$new_url);
 			//echo ("end 2");
 			//$this->r($response);
