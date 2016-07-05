@@ -1,14 +1,79 @@
 <?php
 
+class Post extends Pocket {
+	private $id;
+
+	function __construct() {
+
+	}
+
+	function get() {
+		$endpoint = 'https://getpocket.com/v3/get';
+		$vars = array();
+		$vars['consumer_key'] = $this->consumer_key;
+		$vars['access_token'] = $this->access_token;
+		$vars['tag'] = 'sg-slack';
+		$vars['count'] = '5';
+		$vars['sort'] = 'newest';
+		// $vars['detailType'] = 'complete';
+		$vars['detailType'] = 'simple';
+		$response = $this->post_something($endpoint,$vars);
+		$this->r($response);
+	}
+
+	function save() {
+
+	}
+
+	function untag($id,$tags=array()) {
+		$endpoint = 'https://getpocket.com/v3/send';
+		$vars = array();
+		$vars['consumer_key'] = $this->consumer_key;
+		$vars['access_token'] = $this->access_token;
+		$vars['actions'] = array();
+		$action1 = array();
+		$action1['action'] = 'tags_remove';
+		$action1['item_id'] = $id;
+		$action1['tags'] = 'sg-slack';
+		$action2 = array();
+		$action2['action'] = 'tags_add';
+		$action2['item_id'] = $id;
+		$action2['tags'] = 'sg-slack-posted';
+		$vars['actions'][] = $action1;
+		$vars['actions'][] = $action2;
+		$this->r($vars);
+		exit;
+		$response = $this->post_something($endpoint,$vars);
+		$this->r($response);
+	}
+
+}
+
 class Pocket {
 	// private $endpoint = 'https://getpocket.com/v3/oauth/request';
 	// private $redirect_uri = '';
 	private $consumer_key = '55686-b8c05db7247a1eb28a88120b';
 	private $code = '';
+	private $access_token = 'afbb256b-d59b-4056-88fb-992fda';
+	private $username = 'ponch';
 	private $headers;
 
+	public function getAPost($debug=false) {
+		$endpoint = 'https://getpocket.com/v3/get';
+		$vars = array();
+		$vars['consumer_key'] = $this->consumer_key;
+		$vars['access_token'] = $this->access_token;
+		$vars['tag'] = 'sg-slack';
+		$vars['count'] = '1';
+		$vars['sort'] = 'newest';
+		// $vars['detailType'] = 'complete';
+		$vars['detailType'] = 'simple';
+		$response = $this->post_something($endpoint,$vars,$debug);
+		// $this->r($response);
+		return $response;
+	}
 
-	function __construct($action) {
+	function __construct($action='') {
 		if ($action=='authorized') {
 			echo ("back");
 			$code=$_GET['code'];
@@ -18,7 +83,7 @@ class Pocket {
 			$vars['code'] = $code;
 			$response = $this->post_something($endpoint,$vars,true);
 			$this->r($response);
-		} else {
+		} elseif($action=='connect') {
 			// Connect to Pocket and get a token
 			$vars = array();
 			$vars['consumer_key'] = $this->consumer_key;
@@ -35,6 +100,20 @@ class Pocket {
 			header('Location: '.$new_url);
 			//echo ("end 2");
 			//$this->r($response);
+		} elseif ($action=='get') {
+			$endpoint = 'https://getpocket.com/v3/get';
+			$vars = array();
+			$vars['consumer_key'] = $this->consumer_key;
+			$vars['access_token'] = $this->access_token;
+			$vars['tag'] = 'sg-slack';
+			$vars['count'] = '5';
+			$vars['sort'] = 'newest';
+			// $vars['detailType'] = 'complete';
+			$vars['detailType'] = 'simple';
+			$response = $this->post_something($endpoint,$vars);
+			$this->r($response);
+		} else {
+
 		}
 	}
 
@@ -42,13 +121,9 @@ class Pocket {
 		$headers = array();
 		$headers['Content-Type'] = 'application/json; charset=UTF8';
 		$headers['X-Accept'] = 'application/json';
-		// $headers['X-Accept'] = 'application/x-www-form-urlencoded';
 		$_headers = array();
 		foreach($headers as $k=>$v){
 			$_headers[] = $k.": ".$v;
-		}
-		if ($debug) {
-			$this->r($vars);
 		}
 
 		$post_data = json_encode($vars);
@@ -70,35 +145,32 @@ class Pocket {
 			CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
 			CURLOPT_TIMEOUT        => 120,      // timeout on response
 			CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-			CURLOPT_POST 		   => 1,
+			CURLOPT_POST 		   	   => 1,
 			CURLOPT_POSTFIELDS     => $post_data,
 			CURLOPT_HTTPHEADER	   => $_headers,
 			CURLINFO_HEADER_OUT	   => true,
 	  );
 
-	    $ch = curl_init( $url );
-	    curl_setopt_array( $ch, $options );
+	  $ch = curl_init($url);
+	  curl_setopt_array($ch, $options);
 		$response = curl_exec($ch);
 
 		if(curl_error($ch)) {
-		    echo 'error:' . curl_error($ch);
+		  echo 'error:' . curl_error($ch);
 		}
 
 		if ($debug) {
 			$this->r($response,"response");
 			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-		$headersSent = curl_getinfo($ch, CURLINFO_HEADER_OUT );
-		$headersSent = str_replace("\n", "<br>", $headersSent);
-
-		echo "result=".$result."<br>";
-		echo "http=".$http_code."<br>";
-		echo "headersSent=".$headersSent."<br>";
-	}
+			// $headersSent = curl_getinfo($ch, CURLINFO_HEADER_OUT );
+			// $headersSent = str_replace("\n", "<br>", $headersSent);
+			echo "result=".$result."<br>";
+			echo "http=".$http_code."<br>";
+			// echo "headersSent=".$headersSent."<br>";
+		}
 		curl_close($ch);
-
-		return json_decode($response);
-
+		$response = json_decode($response);
+		return $response;
 	}
 
 	private function r($a,$l='') {
