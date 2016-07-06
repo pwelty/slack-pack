@@ -12,8 +12,8 @@ class Pocket {
 	function untagPost($id,$tag) {
 		$endpoint = 'https://getpocket.com/v3/send';
 		$vars = array();
-		$vars['consumer_key'] = $this->consumer_key;
-		$vars['access_token'] = $this->access_token;
+		$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
+		$vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
 		$vars['actions'] = array();
 		$action1 = array();
 		$action1['action'] = 'tags_remove';
@@ -35,8 +35,8 @@ class Pocket {
 	public function getAPost($tag='sg-slack-general',$debug=false) {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
-		$vars['consumer_key'] = $this->consumer_key;
-		$vars['access_token'] = $this->access_token;
+		$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
+		$vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
 		$vars['tag'] = $tag;
 		$vars['count'] = '1';
 		$vars['sort'] = 'newest';
@@ -53,14 +53,14 @@ class Pocket {
 			$code=$_GET['code'];
 			$endpoint = 'https://getpocket.com/v3/oauth/authorize';
 			$vars = array();
-			$vars['consumer_key'] = $this->consumer_key;
+			$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
 			$vars['code'] = $code;
 			$response = $this->post_something($endpoint,$vars,true);
 			$this->r($response);
-		} elseif($action=='connect') {
+		} elseif($action=='pocket-auth') {
 			// Connect to Pocket and get a token
 			$vars = array();
-			$vars['consumer_key'] = $this->consumer_key;
+			$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
 			$vars['redirect_uri'] = 'https://boiling-spire-90759.herokuapp.com/index.php?action=authorized';
 			$endpoint = 'https://getpocket.com/v3/oauth/request';
 			$response = $this->post_something($endpoint,$vars);
@@ -77,8 +77,8 @@ class Pocket {
 		} elseif ($action=='get') {
 			$endpoint = 'https://getpocket.com/v3/get';
 			$vars = array();
-			$vars['consumer_key'] = $this->consumer_key;
-			$vars['access_token'] = $this->access_token;
+			$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
+			$vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
 			$vars['tag'] = 'sg-slack';
 			$vars['count'] = '5';
 			$vars['sort'] = 'newest';
