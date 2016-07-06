@@ -3,9 +3,9 @@
 class Pocket {
 	// private $endpoint = 'https://getpocket.com/v3/oauth/request';
 	// private $redirect_uri = '';
-	private $consumer_key = '55686-b8c05db7247a1eb28a88120b';
+	private $consumer_key = '';
 	private $code = '';
-	private $access_token = 'afbb256b-d59b-4056-88fb-992fda';
+	private $access_token = '';
 	private $username = 'ponch';
 	private $headers;
 

@@ -2,8 +2,6 @@
 
 class Slack {
 
-  // private $token = 'xoxp-10748692727-10754293943-56992935555-178f09fef6';
-
   public function postTextToChannel($text='test',$channel='@paul',$token) {
     // $url = 'https://hooks.slack.com/services/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';
     $url = 'https://slack.com/api/chat.postMessage';
