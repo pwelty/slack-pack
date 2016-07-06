@@ -1,54 +1,5 @@
 <?php
 
-class Post extends Pocket {
-	private $id;
-
-	function __construct() {
-
-	}
-
-	function get() {
-		$endpoint = 'https://getpocket.com/v3/get';
-		$vars = array();
-		$vars['consumer_key'] = $this->consumer_key;
-		$vars['access_token'] = $this->access_token;
-		$vars['tag'] = 'sg-slack';
-		$vars['count'] = '5';
-		$vars['sort'] = 'newest';
-		// $vars['detailType'] = 'complete';
-		$vars['detailType'] = 'simple';
-		$response = $this->post_something($endpoint,$vars);
-		$this->r($response);
-	}
-
-	function save() {
-
-	}
-
-	function untag($id,$tags=array()) {
-		$endpoint = 'https://getpocket.com/v3/send';
-		$vars = array();
-		$vars['consumer_key'] = $this->consumer_key;
-		$vars['access_token'] = $this->access_token;
-		$vars['actions'] = array();
-		$action1 = array();
-		$action1['action'] = 'tags_remove';
-		$action1['item_id'] = $id;
-		$action1['tags'] = 'sg-slack';
-		$action2 = array();
-		$action2['action'] = 'tags_add';
-		$action2['item_id'] = $id;
-		$action2['tags'] = 'sg-slack-posted';
-		$vars['actions'][] = $action1;
-		$vars['actions'][] = $action2;
-		$this->r($vars);
-		exit;
-		$response = $this->post_something($endpoint,$vars);
-		$this->r($response);
-	}
-
-}
-
 class Pocket {
 	// private $endpoint = 'https://getpocket.com/v3/oauth/request';
 	// private $redirect_uri = '';
@@ -58,12 +9,35 @@ class Pocket {
 	private $username = 'ponch';
 	private $headers;
 
-	public function getAPost($debug=false) {
+	function untagPost($id,$tag) {
+		$endpoint = 'https://getpocket.com/v3/send';
+		$vars = array();
+		$vars['consumer_key'] = $this->consumer_key;
+		$vars['access_token'] = $this->access_token;
+		$vars['actions'] = array();
+		$action1 = array();
+		$action1['action'] = 'tags_remove';
+		$action1['item_id'] = $id;
+		$action1['tags'] = $tag;
+		$action2 = array();
+		$action2['action'] = 'tags_add';
+		$action2['item_id'] = $id;
+		$action2['tags'] = $tag.'-posted';
+		$vars['actions'][] = $action1;
+		$vars['actions'][] = $action2;
+		$this->r($vars);
+		exit;
+		$response = $this->post_something($endpoint,$vars);
+		$this->r($response);
+		return $response;
+	}
+
+	public function getAPost($tag='sg-slack-general',$debug=false) {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
 		$vars['consumer_key'] = $this->consumer_key;
 		$vars['access_token'] = $this->access_token;
-		$vars['tag'] = 'sg-slack';
+		$vars['tag'] = $tag;
 		$vars['count'] = '1';
 		$vars['sort'] = 'newest';
 		// $vars['detailType'] = 'complete';
