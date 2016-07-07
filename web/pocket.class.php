@@ -5,7 +5,7 @@ class Pocket {
 	private $access_token = '';
 	private $headers;
 
-	function untagPost($id,$tag,$simulated=false) {
+	function untagPost($id,$tag,$simulate=false) {
 		$endpoint = 'https://getpocket.com/v3/send';
 		$vars = array();
 		$vars['consumer_key'] = $this->consumer_key;
@@ -21,7 +21,7 @@ class Pocket {
 		$action2['tags'] = $tag.'-posted';
 		$vars['actions'][] = $action1;
 		$vars['actions'][] = $action2;
-		if ($simulated) {
+		if ($simulate) {
 			return $vars;
 		} else {
 			return $this->post_something($endpoint,$vars);

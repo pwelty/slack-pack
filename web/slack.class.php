@@ -3,20 +3,33 @@
 class Slack {
 
   private $token = '';
+  private $team = '';
+  private $paul_channel = '';
 
-  public function postTextToChannel($text='test',$channel='@paul') {
+  public function postTextToChannel($text='test',$channel='@paul',$simulate=false) {
     $url = 'https://slack.com/api/chat.postMessage';
     $vars = array();
     $vars['text'] = $text;
     $vars['as_user'] = 'true';
-    $vars['channel'] = $channel;
+    if ($simulate) {
+      $vars['channel'] = $this->paul_channel;
+    } else {
+      $vars['channel'] = $channel;
+    }
     $vars['token'] = $this->token;
+    r($vars);
     $response = $this->get_something($url,$vars);
     return $response;
   }
 
-  function __construct($token) {
+  function __construct($token,$team) {
     $this->token = $token;
+    $this->team = $team;
+    if ($team=='sg') {
+      $this->paul_channel = '@paul';
+    } elseif ($team=='nh') {
+      $this->paul_channel = '@paul.welty';
+    }
   }
 
   private function get_something($url,$vars) {
