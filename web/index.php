@@ -17,16 +17,19 @@ if ($action=='pocket-auth') {
 } elseif ($action=='authorized') {
   $pocket = new Pocket($action);
 } else {
-  $pocket = new Pocket;
-  $slack = new Slack;
+  $slack_token = getenv('SLACK_TOKEN');
+  $pocket_consumer_key = getenv("POCKET_CONSUMER_KEY");
+  $pocket_access_token = getenv("POCKET_ACCESS_TOKEN");
+  $pocket = new Pocket($pocket_consumer_key,$pocket_access_token);
+  $slack = new Slack($slack_token);
+
   $tag = 'sg-tech';
+  $channel = 'tech';
+
   $posts = $pocket->getAPost($tag);
   $thePosts = $posts->list;
-  $slack_token = getenv('SLACK_TOKEN');
-  r($slack_token,'slack token');
-  exit;
+
   foreach ($thePosts as $aPost) {
-    // r($aPost);
     $excerpt = $aPost->excerpt;
     $url = $aPost->resolved_url;
     $title = $aPost->resolved_title;
@@ -34,10 +37,11 @@ if ($action=='pocket-auth') {
     $text = $url;
     // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
     // r($excerpt,"excerpt");
-    $channel = '@paul';
+    // $channel = '@paul';
     $response = $slack->postTextToChannel($text,$channel,$slack_token);
     r($response);
-    $pocket->untagPost($id,$tag);
+    $response = $pocket->untagPost($id,$tag);
+    r($response);
   }
 
 }

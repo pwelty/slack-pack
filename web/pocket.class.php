@@ -1,19 +1,15 @@
 <?php
 
 class Pocket {
-	// private $endpoint = 'https://getpocket.com/v3/oauth/request';
-	// private $redirect_uri = '';
 	private $consumer_key = '';
-	private $code = '';
 	private $access_token = '';
-	private $username = 'ponch';
 	private $headers;
 
-	function untagPost($id,$tag) {
+	function untagPost($id,$tag,$simulated=false) {
 		$endpoint = 'https://getpocket.com/v3/send';
 		$vars = array();
-		$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
-		$vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
+		$vars['consumer_key'] = $this->consumer_key;
+		$vars['access_token'] = $this->access_token;
 		$vars['actions'] = array();
 		$action1 = array();
 		$action1['action'] = 'tags_remove';
@@ -25,18 +21,18 @@ class Pocket {
 		$action2['tags'] = $tag.'-posted';
 		$vars['actions'][] = $action1;
 		$vars['actions'][] = $action2;
-		$this->r($vars);
-		exit;
-		$response = $this->post_something($endpoint,$vars);
-		$this->r($response);
-		return $response;
+		if ($simulated) {
+			return $vars;
+		} else {
+			return $this->post_something($endpoint,$vars);
+		}
 	}
 
 	public function getAPost($tag='sg-slack-general',$debug=false) {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
-		$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
-		$vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
+		$vars['consumer_key'] = $this->consumer_key;
+		$vars['access_token'] = $this->access_token;
 		$vars['tag'] = $tag;
 		$vars['count'] = '1';
 		$vars['sort'] = 'newest';
@@ -47,20 +43,22 @@ class Pocket {
 		return $response;
 	}
 
-	function __construct($action='') {
+	function __construct($consumer_key,$access_token,$action='') {
+		$this->consumer_key = $consumer_key;
+		$this->access_token = $access_token;
 		if ($action=='authorized') {
 			echo ("back");
 			$code=$_GET['code'];
 			$endpoint = 'https://getpocket.com/v3/oauth/authorize';
 			$vars = array();
-			$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
+			$vars['consumer_key'] = $this->consumer_key;
 			$vars['code'] = $code;
 			$response = $this->post_something($endpoint,$vars,true);
 			$this->r($response);
 		} elseif($action=='pocket-auth') {
 			// Connect to Pocket and get a token
 			$vars = array();
-			$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
+			$vars['consumer_key'] = $this->consumer_key;
 			$vars['redirect_uri'] = 'https://boiling-spire-90759.herokuapp.com/index.php?action=authorized';
 			$endpoint = 'https://getpocket.com/v3/oauth/request';
 			$response = $this->post_something($endpoint,$vars);
@@ -77,8 +75,8 @@ class Pocket {
 		} elseif ($action=='get') {
 			$endpoint = 'https://getpocket.com/v3/get';
 			$vars = array();
-			$vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
-			$vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
+			// $vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
+			// $vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
 			$vars['tag'] = 'sg-slack';
 			$vars['count'] = '5';
 			$vars['sort'] = 'newest';

@@ -2,19 +2,21 @@
 
 class Slack {
 
-  public function postTextToChannel($text='test',$channel='@paul',$token) {
-    // $url = 'https://hooks.slack.com/services/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';
+  private $token = '';
+
+  public function postTextToChannel($text='test',$channel='@paul') {
     $url = 'https://slack.com/api/chat.postMessage';
     $vars = array();
     $vars['text'] = $text;
     $vars['as_user'] = 'true';
-    $vars['channel'] = '@paul';
-    // $vars['token'] = $this->token;
-    $vars['token'] = $token;
-    $this->r($vars);
+    $vars['channel'] = $channel;
+    $vars['token'] = $this->token;
     $response = $this->get_something($url,$vars);
-    // $this->r($response);
     return $response;
+  }
+
+  function __construct($token) {
+    $this->token = $token;
   }
 
   private function get_something($url,$vars) {
