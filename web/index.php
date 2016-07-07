@@ -22,8 +22,6 @@ if ($action=='pocket-auth') {
   $tag = 'sg-tech';
   $posts = $pocket->getAPost($tag);
   $thePosts = $posts->list;
-  phpinfo();
-  exit;
   $slack_token = getenv('SLACK_TOKEN');
   r($slack_token,'slack token');
   exit;
