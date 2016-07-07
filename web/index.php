@@ -9,7 +9,9 @@ require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
 // Establish connection to Pocket
-$action = $_GET['action'];
+// $action = $_GET['action'];
+// $simulate = $_GET['simulate'];
+
 // $pocket = new Pocket($action);
 
 if ($action=='pocket-auth') {
@@ -26,11 +28,11 @@ if ($action=='pocket-auth') {
   $slack_nh = new Slack($slack_token_nh,'nh');
 
   $map = array();
-  $simulate = true;
+  $simulate = false;
   // $map_item['sg-tech']='tech';
   // $map[] = $map_item;
   $channels = array();
-  $channels['sg'] = 'general';
+  $channels['sg'] = '_general';
   $channels['nh'] = 'general';
   $map['sg-general']=$channels;
   $channels['sg'] = 'tech';
