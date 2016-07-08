@@ -43,12 +43,20 @@ if ($action=='pocket-auth') {
   $channels['sg'] = 'tech';
   $channels['nh'] = 'tech-and-digital';
   $map['sg-tech']=$channels;
+  // $channels['sg'] = '_ai';
+  // $channels['nh'] = 'ai';
+  // $map['sg-ai']=$channels;
+  // $channels['sg'] = 'creative';
+  // $channels['nh'] = 'creative';
+  // $map['sg-creative']=$channels;
+
+  $out = '';
 
   foreach ($map as $tag=>$channels) {
-    r($tag);
+    $out .= r($tag);
     $posts = $pocket->getAPost($tag);
     $thePosts = $posts->list;
-    r($thePosts);
+    $out .= r($thePosts);
 
     if (!empty($thePosts)) {
 
@@ -65,15 +73,17 @@ if ($action=='pocket-auth') {
         // $channel = '@paul';
         $response = $slack_sg->postTextToChannel($text,$channels['sg'],$simulate);
         $response = $slack_nh->postTextToChannel($text,$channels['nh'],$simulate);
-        r($response);
+        $out .= r($response);
         $response = $pocket->untagPost($id,$tag,$simulate);
-        r($response);
+        $out .= r($response);
       }
 
     }
 
-  }
+  } // FOREACH
 
-}
+  mailIt($out);
+
+} // ACTIONS IF
 
 ?>
