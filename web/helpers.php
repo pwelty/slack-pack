@@ -3,18 +3,18 @@
 function r($a,$l='') {
   if (is_array($a) || is_object($a)) {
     if ($l) {
-      echo "<p>".$l."=</p><pre>".print_r($a,TRUE)."</pre>";
+      echo "<p><b>".$l."=</b></p><pre>".print_r($a,TRUE)."</pre>";
     } else {
       echo "<pre>".print_r($a,TRUE)."</pre>";
     }
     return "<pre>".print_r($a,TRUE)."</pre>";
   } else {
     if ($l) {
-      echo "<p>".$l."=</p><p>".$a."</p>";
+      echo "<p><b>".$l."=</b></p><p>".$a."</p>";
     } else {
-      echo "<p>".$a."</p>";
+      echo "<p><b>".$a."</b></p>";
     }
-    return "<p>".$a."</p>";
+    return "<p><b>".$a."</b></p>";
   }
 }
 
