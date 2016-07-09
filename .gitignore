@@ -1,4 +1,4 @@
 /vendor/
 /sample-pocket-post-object.txt
 /.env
-/.htaccess
+/web/.htaccess
