@@ -28,14 +28,13 @@ if ($action=='pocket-auth') {
   $slack_token_nh = getenv('SLACK_TOKEN_NH');
   $pocket_consumer_key = getenv("POCKET_CONSUMER_KEY");
   $pocket_access_token = getenv("POCKET_ACCESS_TOKEN");
+  $simulate_channel['sg'] = getenv("SIMULATE_SG");
+  $simulate_channel['nh'] = getenv("SIMULATE_NH");
   $pocket = new Pocket($pocket_consumer_key,$pocket_access_token);
-  $slack_sg = new Slack($slack_token_sg,'sg');
-  $slack_nh = new Slack($slack_token_nh,'nh');
+  $slack_sg = new Slack($slack_token_sg,'sg',$simulate_channel['sg']);
+  $slack_nh = new Slack($slack_token_nh,'nh',$simulate_channel['nh']);
 
   $map = array();
-  // $simulate = false;
-  // $map_item['sg-tech']='tech';
-  // $map[] = $map_item;
   $channels = array();
   $channels['sg'] = '_general';
   $channels['nh'] = 'general';
