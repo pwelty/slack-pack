@@ -43,6 +43,7 @@ if ($action=='pocket-auth') {
   $slack_sg = new Slack($slack_token_sg,'sg',$simulate_channel['sg']);
   $slack_nh = new Slack($slack_token_nh,'nh',$simulate_channel['nh']);
 
+  // CREATE (POCKET) TAG TO (SLACK) CHANNEL MAP
   $map = array();
   $channels = array();
   $channels['sg'] = '_general';
@@ -58,8 +59,10 @@ if ($action=='pocket-auth') {
   // $channels['nh'] = 'creative';
   // $map['sg-creative']=$channels;
 
-  $out = '';
+  // START THE EMAIL REPORT VAR
+  $out = r($simulate,'simulate');
 
+  // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
   foreach ($map as $tag=>$channels) {
     $out .= r($tag);
     $posts = $pocket->getAPost($tag);
@@ -78,7 +81,6 @@ if ($action=='pocket-auth') {
         $text = $url;
         // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
         // r($excerpt,"excerpt");
-        // $channel = '@paul';
         $response = $slack_sg->postTextToChannel($text,$channels['sg'],$simulate);
         $out .= r($response,'SG');
         $response = $slack_nh->postTextToChannel($text,$channels['nh'],$simulate);
