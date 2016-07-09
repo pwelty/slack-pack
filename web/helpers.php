@@ -20,7 +20,7 @@ function r($a,$l='') {
 
 function mailIt($html) {
   $from = new SendGrid\Email(null, "paul.welty@sparksgrove.com");
-  $subject = "Hello World from the SendGrid PHP Library";
+  $subject = "Slack Pack notification";
   $to = new SendGrid\Email(null, "ponch@paulwelty.com");
   $content = new SendGrid\Content("text/html", "<html>".$html."</html");
   $mail = new SendGrid\Mail($from, $subject, $to, $content);
