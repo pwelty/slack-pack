@@ -76,13 +76,14 @@ if ($action=='pocket-auth') {
         $out .= r($response);
         $response = $pocket->untagPost($id,$tag,$simulate);
         $out .= r($response);
-      }
+      } // THEPOSTS
 
     }
 
-  } // FOREACH
+  } // MAP
 
-  mailIt($out);
+  $to_email = getenv('TO_EMAIL');
+  mailIt($out,$to_email,$to_email);
 
 } // ACTIONS IF
 

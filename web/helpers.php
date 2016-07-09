@@ -18,10 +18,10 @@ function r($a,$l='') {
   }
 }
 
-function mailIt($html) {
-  $from = new SendGrid\Email(null, "paul.welty@sparksgrove.com");
+function mailIt($html,$from_email,$to_email) {
+  $from = new SendGrid\Email(null,$from_email);
   $subject = "Slack Pack notification";
-  $to = new SendGrid\Email(null, "ponch@paulwelty.com");
+  $to = new SendGrid\Email(null,$to_email);
   $content = new SendGrid\Content("text/html", "<html>".$html."</html");
   $mail = new SendGrid\Mail($from, $subject, $to, $content);
   $apiKey = getenv('SENDGRID_API_KEY');
