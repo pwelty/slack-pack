@@ -8,28 +8,37 @@ require_once 'helpers.php';
 require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
-// Establish connection to Pocket
-// $action = $_GET['action'];
-
 if (isset($_GET['simulate'])) {
   $simulate = true;
 } else {
   $simulate = false;
 }
 
-// $pocket = new Pocket($action);
+$to_email = getenv('TO_EMAIL');
+echo "email=".$to_email;
+
+$dayOfWeek = date("w");
+if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
+  mailIt("Skipping on the weekend",$to_email,$to_email);
+  echo "Skipping on the weekend";
+  exit;
+}
 
 if ($action=='pocket-auth') {
   $pocket = new Pocket($action);
 } elseif ($action=='authorized') {
   $pocket = new Pocket($action);
 } else {
+
+  // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
   $slack_token_sg = getenv('SLACK_TOKEN');
   $slack_token_nh = getenv('SLACK_TOKEN_NH');
   $pocket_consumer_key = getenv("POCKET_CONSUMER_KEY");
   $pocket_access_token = getenv("POCKET_ACCESS_TOKEN");
   $simulate_channel['sg'] = getenv("SIMULATE_SG");
   $simulate_channel['nh'] = getenv("SIMULATE_NH");
+
+  // CREATE COMM OBJECTS
   $pocket = new Pocket($pocket_consumer_key,$pocket_access_token);
   $slack_sg = new Slack($slack_token_sg,'sg',$simulate_channel['sg']);
   $slack_nh = new Slack($slack_token_nh,'nh',$simulate_channel['nh']);
@@ -39,9 +48,9 @@ if ($action=='pocket-auth') {
   $channels['sg'] = '_general';
   $channels['nh'] = 'general';
   $map['sg-general']=$channels;
-  $channels['sg'] = 'tech';
-  $channels['nh'] = 'tech-and-digital';
-  $map['sg-tech']=$channels;
+  // $channels['sg'] = 'tech';
+  // $channels['nh'] = 'tech-and-digital';
+  // $map['sg-tech']=$channels;
   // $channels['sg'] = '_ai';
   // $channels['nh'] = 'ai';
   // $map['sg-ai']=$channels;
@@ -82,7 +91,6 @@ if ($action=='pocket-auth') {
 
   } // MAP
 
-  $to_email = getenv('TO_EMAIL');
   mailIt($out,$to_email,$to_email);
 
 } // ACTIONS IF
