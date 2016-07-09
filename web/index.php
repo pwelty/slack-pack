@@ -71,10 +71,11 @@ if ($action=='pocket-auth') {
         // r($excerpt,"excerpt");
         // $channel = '@paul';
         $response = $slack_sg->postTextToChannel($text,$channels['sg'],$simulate);
+        $out .= r($response,'SG');
         $response = $slack_nh->postTextToChannel($text,$channels['nh'],$simulate);
-        $out .= r($response);
+        $out .= r($response,'NH');
         $response = $pocket->untagPost($id,$tag,$simulate);
-        $out .= r($response);
+        $out .= r($response,'UNTAG');
       } // THEPOSTS
 
     }
