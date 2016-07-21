@@ -69,10 +69,10 @@ class Pocket {
 			// exit;
 			// $this->code = $code;
 			$redirect_uri = htmlentities($vars['redirect_uri'].'?code='.$code);
-			echo $redirect_uri;
+			// echo $redirect_uri;
 			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.$redirect_uri;
-			r($new_url);
-			exit;
+			// r($new_url);
+			// exit;
 			header('Location: '.$new_url);
 			//echo ("end 2");
 			//$this->r($response);
