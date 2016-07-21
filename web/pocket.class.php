@@ -67,8 +67,8 @@ class Pocket {
 			$code = $response->code;
 			// echo ($code);
 			// exit;
-			$this->code = $code;
-			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.urlencode('https://boiling-spire-90759.herokuapp.com/index.php?action=authorized&code='.$code);
+			// $this->code = $code;
+			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.urlencode($vars['redirect_uri'].'?code='.$code);
 			header('Location: '.$new_url);
 			//echo ("end 2");
 			//$this->r($response);
