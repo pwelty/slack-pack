@@ -5,7 +5,7 @@ Move (some) items from Pocket to Slack on a regular schedule.
 
 1. Clone this.
 1. Run/install composer (composer install)
-1. Set some env vars in .env and/or .htaccess (I use .htacces when running locally)
+1. Set some env vars in .env and/or .htaccess (I use .htaccess when running locally)
   * SLACK_TOKEN= <You can get this at Slack>
   * POCKET_CONSUMER_KEY= (You can get this at <https://getpocket.com/developer/apps/new>)
   * POCKET_ACCESS_TOKEN= (You might not be able to set this right now. If you don't have this, see 'GET POCKET TOKEN' below)
@@ -22,5 +22,5 @@ Move (some) items from Pocket to Slack on a regular schedule.
 
 ## Normal operation
 
-* just hit index.php to simulate a run.
-* hit index.php/?live= for the real deal
+* just hit /index.php to simulate a run.
+* hit /index.php?live= for the real deal
