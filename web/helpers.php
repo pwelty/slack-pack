@@ -18,15 +18,14 @@ function r($a,$l='') {
   }
 }
 
-function mailIt($html,$from_email,$to_email) {
-  $from = new SendGrid\Email(null,$from_email);
+function mailIt($html,$fromEmail,$toEmail) {
+  $from = new SendGrid\Email(null,$fromEmail);
   $subject = "Slack Pack notification";
-  $to = new SendGrid\Email(null,$to_email);
-  $content = new SendGrid\Content("text/html", "<html>".$html."</html");
+  $to = new SendGrid\Email(null,$toEmail);
+  $content = new SendGrid\Content("text/html", "<html>".$html."</html>");
   $mail = new SendGrid\Mail($from, $subject, $to, $content);
   $apiKey = getenv('SENDGRID_API_KEY');
   $sg = new \SendGrid($apiKey);
-
   $response = $sg->client->mail()->send()->post($mail);
   echo $response->statusCode();
   echo $response->headers();
