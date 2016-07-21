@@ -3,7 +3,6 @@
 class Slack {
 
   private $token = '';
-  private $team = '';
   private $simulate_channel = '';
 
   public function postTextToChannel($text='test',$channel,$simulate=false) {
@@ -22,9 +21,8 @@ class Slack {
     return $response;
   }
 
-  function __construct($token,$team,$simulate_channel) {
+  function __construct($token,$simulate_channel) {
     $this->token = $token;
-    $this->team = $team;
     $this->simulate_channel = $simulate_channel;
   }
 
