@@ -11,3 +11,11 @@ TO_EMAIL=
 SIMULATION_CHANNEL=
 
 To get the POCKET_ACCESS_TOKEN, start with ...
+
+/pocket-auth.php
+
+Eventually you'll get an access token to add to the env vars.
+
+Normal operation
+
+just hit index.php
