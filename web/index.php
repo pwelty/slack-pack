@@ -8,10 +8,10 @@ require_once 'helpers.php';
 require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
-if (isset($_GET['simulate'])) {
-  $simulate = true;
-} else {
+if (isset($_GET['live'])) {
   $simulate = false;
+} else {
+  $simulate = true;
 }
 
 $to_email = getenv('TO_EMAIL');
