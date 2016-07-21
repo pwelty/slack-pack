@@ -4,14 +4,11 @@
 $map = array();
 $channels = array();
 
-// $channels[] = 'general';
-// $map['sg-general']=$channels;
+$channels[] = 'DESTINATION_SLACK_CHANNEL_NAME';
+$map['POCKET_TAG_NAME']=$channels;
 
-$channels[] = 'tech_digital';
-$map['sg-tech']=$channels;
-
-$channels[] = 'tech_digital_dev';
-$map['sg-dev']=$channels;
+$channels[] = 'OTHER_DESTINATION_SLACK_CHANNEL_NAME';
+$map['OTHER POCKET_TAG_NAME']=$channels;
 
 // $channels[] = 'ai';
 // $map['sg-ai']=$channels;
