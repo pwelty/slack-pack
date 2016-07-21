@@ -4,7 +4,7 @@
     "sendgrid/sendgrid": "~5.0.4"
   },
   "require-dev": {
-      "heroku/heroku-buildpack-php": "*",
-      "sendgrid/sendgrid": "~5.0.4"
+    "heroku/heroku-buildpack-php": "*",
+    "sendgrid/sendgrid": "~5.0.4"
   }
 }

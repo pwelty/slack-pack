@@ -24,77 +24,57 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
   exit;
 }
 
-if ($action=='pocket-auth') {
-  $pocket = new Pocket($action);
-} elseif ($action=='authorized') {
-  $pocket = new Pocket($action);
-} else {
+// GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
+$slack_token = getenv('SLACK_TOKEN');
+$pocket_consumer_key = getenv("POCKET_CONSUMER_KEY");
+$pocket_access_token = getenv("POCKET_ACCESS_TOKEN");
+$simulate_channel = getenv("SIMULATE_CHANNEL");
 
-  // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
-  $slack_token_sg = getenv('SLACK_TOKEN');
-  $slack_token_nh = getenv('SLACK_TOKEN_NH');
-  $pocket_consumer_key = getenv("POCKET_CONSUMER_KEY");
-  $pocket_access_token = getenv("POCKET_ACCESS_TOKEN");
-  $simulate_channel['sg'] = getenv("SIMULATE_SG");
-  $simulate_channel['nh'] = getenv("SIMULATE_NH");
+// CREATE COMM OBJECTS
+$pocket = new Pocket($pocket_consumer_key,$pocket_access_token);
+$slack = new Slack($slack_token,$simulate_channel);
 
-  // CREATE COMM OBJECTS
-  $pocket = new Pocket($pocket_consumer_key,$pocket_access_token);
-  $slack_sg = new Slack($slack_token_sg,'sg',$simulate_channel['sg']);
-  $slack_nh = new Slack($slack_token_nh,'nh',$simulate_channel['nh']);
+// IMPORT THE POCKET->SLACK CHANNELS MAP
+require_once('config.php');
 
-  // CREATE (POCKET) TAG TO (SLACK) CHANNEL MAP
-  $map = array();
-  $channels = array();
-  $channels['sg'] = '_general';
-  $channels['nh'] = 'general';
-  $map['sg-general']=$channels;
-  // $channels['sg'] = 'tech';
-  // $channels['nh'] = 'tech-and-digital';
-  // $map['sg-tech']=$channels;
-  // $channels['sg'] = '_ai';
-  // $channels['nh'] = 'ai';
-  // $map['sg-ai']=$channels;
-  // $channels['sg'] = 'creative';
-  // $channels['nh'] = 'creative';
-  // $map['sg-creative']=$channels;
+// START THE EMAIL REPORT VAR
+$out = r($simulate,'simulate');
 
-  // START THE EMAIL REPORT VAR
-  $out = r($simulate,'simulate');
+// LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
+foreach ($map as $tag=>$channels) {
+  $out .= r($tag);
+  $posts = $pocket->getAPost($tag);
+  $thePosts = $posts->list;
+  $out .= r($thePosts);
 
-  // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
-  foreach ($map as $tag=>$channels) {
-    $out .= r($tag);
-    $posts = $pocket->getAPost($tag);
-    $thePosts = $posts->list;
-    $out .= r($thePosts);
+  if (!empty($thePosts)) {
 
-    if (!empty($thePosts)) {
+    foreach ($thePosts as $aPost) {
 
-      foreach ($thePosts as $aPost) {
-        $excerpt = $aPost->excerpt;
-        $url = $aPost->resolved_url;
-        $loc = strpos($url,"?");
-        $url = substr($url,0,strlen($url)-$loc);
-        $title = $aPost->resolved_title;
-        $id = $aPost->item_id;
-        $text = $url;
-        // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
-        // r($excerpt,"excerpt");
-        $response = $slack_sg->postTextToChannel($text,$channels['sg'],$simulate);
-        $out .= r($response,'SG');
-        $response = $slack_nh->postTextToChannel($text,$channels['nh'],$simulate);
-        $out .= r($response,'NH');
+      // BUILD THE POST TEXT
+      $excerpt = $aPost->excerpt;
+      $url = $aPost->resolved_url;
+      $loc = strpos($url,"?");
+      $url = substr($url,0,strlen($url)-$loc);
+      $title = $aPost->resolved_title;
+      $id = $aPost->item_id;
+      $text = $url;
+      // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
+      // r($excerpt,"excerpt");
+
+      // LOOP THROUGH THE CHANNELS AND POST
+      foreach ($channels as $channel) {
+        $response = $slack->postTextToChannel($text,$channel,$simulate);
+        $out .= r($response,$channel);
         $response = $pocket->untagPost($id,$tag,$simulate);
-        $out .= r($response,'UNTAG');
-      } // THEPOSTS
+        $out .= r($response,'UNTAGGED');
+      }
+    } // THEPOSTS
 
-    }
+  }
 
-  } // MAP
+} // MAP
 
-  mailIt($out,$to_email,$to_email);
-
-} // ACTIONS IF
+mailIt($out,$to_email,$to_email);
 
 ?>

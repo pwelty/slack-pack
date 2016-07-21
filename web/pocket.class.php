@@ -3,7 +3,6 @@
 class Pocket {
 	private $consumer_key = '';
 	private $access_token = '';
-	private $headers;
 
 	function untagPost($id,$tag,$simulate=false) {
 		$endpoint = 'https://getpocket.com/v3/send';
@@ -54,12 +53,13 @@ class Pocket {
 			$vars['consumer_key'] = $this->consumer_key;
 			$vars['code'] = $code;
 			$response = $this->post_something($endpoint,$vars,true);
+			echo "put this access token in the env vars";
 			$this->r($response);
 		} elseif($action=='pocket-auth') {
 			// Connect to Pocket and get a token
 			$vars = array();
 			$vars['consumer_key'] = $this->consumer_key;
-			$vars['redirect_uri'] = 'https://boiling-spire-90759.herokuapp.com/index.php?action=authorized';
+			$vars['redirect_uri'] = $_SERVER['HTTP_HOST'].'/pocket-authorized.php';
 			$endpoint = 'https://getpocket.com/v3/oauth/request';
 			$response = $this->post_something($endpoint,$vars);
 			// echo ("end 1");
