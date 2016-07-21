@@ -1,6 +1,10 @@
 # slack-pack
 Move (some) items from Pocket to Slack on a regular schedule.
 
+For each Pocket tag you put into config.php, Slack Pack will post that url to the corresponding Slack channel (also set in config.php).
+
+Then, the tag in Pocket will be changed from 'tag' to 'tag-posted'.
+
 ## Getting started
 
 1. Clone this.
