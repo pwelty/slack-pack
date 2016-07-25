@@ -41,7 +41,7 @@ require_once('config.php');
 $out = r($simulate,'simulate');
 
 // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
-foreach ($map as $tag=>$channels) {
+foreach ($map as $tag=>$channel) {
   $out .= r($tag);
   $posts = $pocket->getAPost($tag);
   $thePosts = $posts->list;
@@ -62,13 +62,12 @@ foreach ($map as $tag=>$channels) {
       // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
       // r($excerpt,"excerpt");
 
-      // LOOP THROUGH THE CHANNELS AND POST
-      foreach ($channels as $channel) {
-        $response = $slack->postTextToChannel($text,$channel,$simulate);
-        $out .= r($response,$channel);
-        $response = $pocket->untagPost($id,$tag,$simulate);
-        $out .= r($response,'UNTAGGED');
-      }
+      // POST
+      $response = $slack->postTextToChannel($text,$channel,$simulate);
+      $out .= r($response,$channel);
+      $response = $pocket->untagPost($id,$tag,$simulate);
+      $out .= r($response,'UNTAGGED');
+
     } // THEPOSTS
 
   }
