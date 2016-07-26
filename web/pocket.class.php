@@ -1,10 +1,11 @@
 <?php
 
 class Pocket {
-	private $consumer_key = '';
-	private $access_token = '';
+	private $consumerKey = '';
+	private $accessToken = '';
+	private $simulate = true;
 
-	function untagPost($id,$tag,$simulate=false) {
+	function untagPost($id,$tag) {
 		$endpoint = 'https://getpocket.com/v3/send';
 		$vars = array();
 		$vars['consumer_key'] = $this->consumer_key;
@@ -20,7 +21,7 @@ class Pocket {
 		$action2['tags'] = $tag.'-posted';
 		$vars['actions'][] = $action1;
 		$vars['actions'][] = $action2;
-		if ($simulate) {
+		if ($this->simulate) {
 			return $vars;
 		} else {
 			return $this->post_something($endpoint,$vars);
@@ -30,8 +31,8 @@ class Pocket {
 	public function getAPost($tag='sg-slack-general',$debug=false) {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
-		$vars['consumer_key'] = $this->consumer_key;
-		$vars['access_token'] = $this->access_token;
+		$vars['consumer_key'] = $this->consumerKey;
+		$vars['access_token'] = $this->accessToken;
 		$vars['tag'] = $tag;
 		$vars['count'] = '1';
 		$vars['sort'] = 'newest';
@@ -42,15 +43,16 @@ class Pocket {
 		return $response;
 	}
 
-	function __construct($consumer_key,$access_token,$action='') {
-		$this->consumer_key = $consumer_key;
-		$this->access_token = $access_token;
+	function __construct($consumerKey,$accessToken,$action='',$simulate=true) {
+		$this->consumerKey = $consumerKey;
+		$this->accessToken = $accessToken;
+		$this->simulate = $simulate;
 		if ($action=='authorized') {
 			echo ("back");
 			$code=$_GET['code'];
 			$endpoint = 'https://getpocket.com/v3/oauth/authorize';
 			$vars = array();
-			$vars['consumer_key'] = $this->consumer_key;
+			$vars['consumer_key'] = $this->consumerKey;
 			$vars['code'] = $code;
 			$response = $this->post_something($endpoint,$vars,true);
 			echo "put this access token in the env vars";
@@ -58,7 +60,7 @@ class Pocket {
 		} elseif($action=='pocket-auth') {
 			// Connect to Pocket and get a token
 			$vars = array();
-			$vars['consumer_key'] = $this->consumer_key;
+			$vars['consumer_key'] = $this->consumerKey;
 			$vars['redirect_uri'] = 'http://'.$_SERVER['HTTP_HOST'].'/pocket-authorized.php';
 			$endpoint = 'https://getpocket.com/v3/oauth/request';
 			$response = $this->post_something($endpoint,$vars);
@@ -68,9 +70,9 @@ class Pocket {
 			// echo ($code);
 			// exit;
 			// $this->code = $code;
-			$redirect_uri = htmlentities($vars['redirect_uri'].'?code='.$code);
+			$redirectUri = htmlentities($vars['redirect_uri'].'?code='.$code);
 			// echo $redirect_uri;
-			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.$redirect_uri;
+			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.$redirectUri;
 			// r($new_url);
 			// exit;
 			header('Location: '.$new_url);
@@ -88,8 +90,6 @@ class Pocket {
 			$vars['detailType'] = 'simple';
 			$response = $this->post_something($endpoint,$vars);
 			$this->r($response);
-		} else {
-
 		}
 	}
 
@@ -147,14 +147,6 @@ class Pocket {
 		curl_close($ch);
 		$response = json_decode($response);
 		return $response;
-	}
-
-	private function r($a,$l='') {
-		if ($l) {
-			echo $l."=<pre>".print_r($a,TRUE)."</pre>";
-		} else {
-			echo "<pre>".print_r($a,TRUE)."</pre>";
-		}
 	}
 
 } // Pocket

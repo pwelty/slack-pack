@@ -8,14 +8,13 @@ require_once 'helpers.php';
 require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
+$simulate = true;
 if (isset($_GET['live'])) {
   $simulate = false;
-} else {
-  $simulate = true;
 }
 
-$to_email = getenv('TO_EMAIL');
-echo "email=".$to_email;
+$toEmail = getenv('TO_EMAIL');
+echo "emails going to ".$toEmail;
 
 $dayOfWeek = date("w");
 if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
@@ -25,14 +24,14 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
 }
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
-$slack_token = getenv('SLACK_TOKEN');
-$pocket_consumer_key = getenv("POCKET_CONSUMER_KEY");
-$pocket_access_token = getenv("POCKET_ACCESS_TOKEN");
-$simulate_channel = getenv("SIMULATE_CHANNEL");
+$slackToken = getenv('SLACK_TOKEN');
+$pocketConsumerKey = getenv("POCKET_CONSUMER_KEY");
+$pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
+$simulateChannel = getenv("SIMULATE_CHANNEL");
 
 // CREATE COMM OBJECTS
-$pocket = new Pocket($pocket_consumer_key,$pocket_access_token);
-$slack = new Slack($slack_token,$simulate_channel);
+$pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate);
+$slack = new Slack($slackToken,$simulateChannel,$simulate);
 
 // IMPORT THE POCKET->SLACK CHANNELS MAP
 require_once('config.php');
@@ -63,9 +62,10 @@ foreach ($map as $tag=>$channel) {
       // r($excerpt,"excerpt");
 
       // POST
-      $response = $slack->postTextToChannel($text,$channel,$simulate);
+      echo "<p>Posting...".$text." TO ".$channel."</p>";
+      $response = $slack->postTextToChannel($text,$channel);
       $out .= r($response,$channel);
-      $response = $pocket->untagPost($id,$tag,$simulate);
+      $response = $pocket->untagPost($id,$tag);
       $out .= r($response,'UNTAGGED');
 
     } // THEPOSTS
@@ -74,6 +74,6 @@ foreach ($map as $tag=>$channel) {
 
 } // MAP
 
-mailIt($out,$to_email,$to_email);
+mailIt($out,$toEmail,$toEmail);
 
 ?>
