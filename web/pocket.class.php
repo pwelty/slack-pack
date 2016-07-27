@@ -28,7 +28,7 @@ class Pocket {
 		}
 	}
 
-	public function getAPost($tag='sg-slack-general',$debug=false) {
+	public function getAPost($tag='sg-slack-general') {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
 		$vars['consumer_key'] = $this->consumerKey;
@@ -36,10 +36,8 @@ class Pocket {
 		$vars['tag'] = $tag;
 		$vars['count'] = '1';
 		$vars['sort'] = 'newest';
-		// $vars['detailType'] = 'complete';
 		$vars['detailType'] = 'simple';
-		$response = $this->post_something($endpoint,$vars,$debug);
-		// $this->r($response);
+		$response = $this->postSomething($endpoint,$vars);
 		return $response;
 	}
 
@@ -82,23 +80,19 @@ class Pocket {
 		// }
 	}
 
-	private function post_something($url,$vars,$debug=false) {
+	private function postSomething($url,$vars) {
 		$headers = array();
 		$headers['Content-Type'] = 'application/json; charset=UTF8';
 		$headers['X-Accept'] = 'application/json';
-		$_headers = array();
+		$realHeaders = array();
 		foreach($headers as $k=>$v){
-			$_headers[] = $k.": ".$v;
+			$realHeaders[] = $k.": ".$v;
 		}
 
-		$post_data = json_encode($vars);
+		$postData = json_encode($vars);
 
 		// foreach($vars as $key=>$value) { $post_data .= $key.'='.$value.'&'; }
 		// $post_data = rtrim($post_data, '&');
-
-		if ($debug) {
- 			$this->r($post_data);
-		}
 
 	  $options = array(
 			CURLOPT_RETURNTRANSFER => true,     // return web page
@@ -116,24 +110,24 @@ class Pocket {
 			CURLINFO_HEADER_OUT	   => true,
 	  );
 
-	  $ch = curl_init($url);
-	  curl_setopt_array($ch, $options);
-		$response = curl_exec($ch);
+	  $curlHandle = curl_init($url);
+	  curl_setopt_array($curlHandle, $options);
+		$response = curl_exec($curlHandle);
 
-		if(curl_error($ch)) {
-		  echo 'error:' . curl_error($ch);
+		if(curl_error($curlHandle)) {
+		  echo 'error:' . curl_error($curlHandle);
 		}
 
-		if ($debug) {
-			$this->r($response,"response");
-			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			// $headersSent = curl_getinfo($ch, CURLINFO_HEADER_OUT );
-			// $headersSent = str_replace("\n", "<br>", $headersSent);
-			echo "result=".$result."<br>";
-			echo "http=".$http_code."<br>";
-			// echo "headersSent=".$headersSent."<br>";
-		}
-		curl_close($ch);
+		// if ($debug) {
+		// 	$this->r($response,"response");
+		// 	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		// 	// $headersSent = curl_getinfo($ch, CURLINFO_HEADER_OUT );
+		// 	// $headersSent = str_replace("\n", "<br>", $headersSent);
+		// 	echo "result=".$result."<br>";
+		// 	echo "http=".$http_code."<br>";
+		// 	// echo "headersSent=".$headersSent."<br>";
+		// }
+		curl_close($curlHandle);
 		$response = json_decode($response);
 		return $response;
 	}
