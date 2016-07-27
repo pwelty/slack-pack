@@ -6,7 +6,7 @@ class Slack {
   private $simulateChannel = '';
   private $simulate = true;
 
-  public function postTextToChannel($text='test',$channel,$simulate=false) {
+  public function postTextToChannel($text='test',$channel) {
     $url = 'https://slack.com/api/chat.postMessage';
     $vars = array();
     $vars['text'] = $text;
@@ -18,7 +18,7 @@ class Slack {
     }
     $vars['token'] = $this->token;
     r($vars);
-    $response = $this->get_something($url,$vars);
+    $response = $this->getSomething($url,$vars);
     return $response;
   }
 
@@ -28,13 +28,13 @@ class Slack {
     $this->simulate = $simulate;
   }
 
-  private function get_something($url,$vars) {
+  private function getSomething($url,$vars) {
     $args = array();
     foreach ($vars as $k=>$v) {
       $args[]=$k.'='.urlencode($v);
     }
-    $arg_string = implode($args,"&");
-    return file_get_contents($url."?".$arg_string);
+    $argString = implode($args,"&");
+    return file_get_contents($url."?".$argString);
   }
 
   // private function post_something($url,$vars,$debug=false) {

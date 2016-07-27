@@ -64,33 +64,22 @@ class Pocket {
 			$vars['redirect_uri'] = 'http://'.$_SERVER['HTTP_HOST'].'/pocket-authorized.php';
 			$endpoint = 'https://getpocket.com/v3/oauth/request';
 			$response = $this->post_something($endpoint,$vars);
-			// echo ("end 1");
 			$this->r($response);
 			$code = $response->code;
-			// echo ($code);
-			// exit;
-			// $this->code = $code;
 			$redirectUri = htmlentities($vars['redirect_uri'].'?code='.$code);
-			// echo $redirect_uri;
-			$new_url = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.$redirectUri;
-			// r($new_url);
-			// exit;
-			header('Location: '.$new_url);
-			//echo ("end 2");
-			//$this->r($response);
-		} elseif ($action=='get') {
-			$endpoint = 'https://getpocket.com/v3/get';
-			$vars = array();
-			// $vars['consumer_key'] = getenv('POCKET_CONSUMER_KEY');
-			// $vars['access_token'] = getenv('POCKET_ACCESS_TOKEN');
-			$vars['tag'] = 'sg-slack';
-			$vars['count'] = '5';
-			$vars['sort'] = 'newest';
-			// $vars['detailType'] = 'complete';
-			$vars['detailType'] = 'simple';
-			$response = $this->post_something($endpoint,$vars);
-			$this->r($response);
+			$newUrl = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.$redirectUri;
+			header('Location: '.$newUrl);
 		}
+		// } elseif ($action=='get') {
+		// 	$endpoint = 'https://getpocket.com/v3/get';
+		// 	$vars = array();
+		// 	$vars['tag'] = 'sg-slack';
+		// 	$vars['count'] = '5';
+		// 	$vars['sort'] = 'newest';
+		// 	$vars['detailType'] = 'simple';
+		// 	$response = $this->post_something($endpoint,$vars);
+		// 	$this->r($response);
+		// }
 	}
 
 	private function post_something($url,$vars,$debug=false) {
