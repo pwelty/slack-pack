@@ -106,7 +106,7 @@ class Pocket {
 			CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 			CURLOPT_POST 		   	   => 1,
 			CURLOPT_POSTFIELDS     => $post_data,
-			CURLOPT_HTTPHEADER	   => $_headers,
+			CURLOPT_HTTPHEADER	   => $realHeaders,
 			CURLINFO_HEADER_OUT	   => true,
 	  );
 
