@@ -3,15 +3,18 @@
 function r($anArray,$aLabel='') {
   $out = '';
   if ($aLabel) {
-    $someText = "<p><b>".$l."=</b></p>";
+    $someText = "<p><b>".$aLabel."=</b></p>";
     echo $someText;
     $out .= $someText;
   }
   if (is_array($anArray) || is_object($a)) {
-      $someText = "<p><pre>".print_r($anArray,TRUE)."</pre></p>";
+    $someText = "<p><pre>".print_r($anArray,TRUE)."</pre></p>";
+    $out .= $someText;
   } else {
     $someText = "<p><b>".$anArray."</b></p>";
+    $out .= $someText;
   }
+  return $out;
 }
 
 function mailIt($html,$fromEmail,$toEmail) {
