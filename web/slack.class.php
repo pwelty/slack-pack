@@ -11,10 +11,9 @@ class Slack {
     $vars = array();
     $vars['text'] = $text;
     $vars['as_user'] = 'true';
+    $vars['channel'] = $channel;
     if ($this->simulate) {
       $vars['channel'] = $this->simulateChannel;
-    } else {
-      $vars['channel'] = $channel;
     }
     $vars['token'] = $this->token;
     r($vars);

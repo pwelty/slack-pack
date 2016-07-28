@@ -7,10 +7,10 @@ function r($anArray,$aLabel='') {
     echo $someText;
     $out .= $someText;
   }
+  $someText = "<p><b>".$anArray."</b></p>";
   if (is_array($anArray) || is_object($anArray)) {
     $someText = "<p><pre>".print_r($anArray,TRUE)."</pre></p>";
-  } else {
-    $someText = "<p><b>".$anArray."</b></p>";
+    echo $someText;
   }
   $out .= $someText;
   return $out;
