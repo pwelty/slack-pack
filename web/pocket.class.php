@@ -23,9 +23,8 @@ class Pocket {
 		$vars['actions'][] = $action2;
 		if ($this->simulate) {
 			return $vars;
-		} else {
-			return $this->post_something($endpoint,$vars);
 		}
+		return $this->postSomething($endpoint,$vars);
 	}
 
 	public function getAPost($tag='sg-slack-general') {
@@ -52,7 +51,7 @@ class Pocket {
 			$vars = array();
 			$vars['consumer_key'] = $this->consumerKey;
 			$vars['code'] = $code;
-			$response = $this->post_something($endpoint,$vars,true);
+			$response = $this->postSomething($endpoint,$vars,true);
 			echo "put this access token in the env vars";
 			$this->r($response);
 		} elseif($action=='pocket-auth') {
@@ -105,7 +104,7 @@ class Pocket {
 			CURLOPT_TIMEOUT        => 120,      // timeout on response
 			CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 			CURLOPT_POST 		   	   => 1,
-			CURLOPT_POSTFIELDS     => $post_data,
+			CURLOPT_POSTFIELDS     => $postData,
 			CURLOPT_HTTPHEADER	   => $realHeaders,
 			CURLINFO_HEADER_OUT	   => true,
 	  );
@@ -114,7 +113,7 @@ class Pocket {
 	  curl_setopt_array($curlHandle, $options);
 		$response = curl_exec($curlHandle);
 
-		if(curl_error($curlHandle)) {
+		if (curl_error($curlHandle)) {
 		  echo 'error:' . curl_error($curlHandle);
 		}
 
