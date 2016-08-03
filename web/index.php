@@ -54,7 +54,9 @@ foreach ($map as $tag=>$channel) {
       $excerpt = $aPost->excerpt;
       $url = $aPost->resolved_url;
       $loc = strpos($url,"?");
-      $url = substr($url,0,strlen($url)-$loc);
+      if ($loc) {
+        $url = substr($url,0,$loc);
+      }
       $title = $aPost->resolved_title;
       $id = $aPost->item_id;
       $text = $url;

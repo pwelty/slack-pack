@@ -9,10 +9,10 @@ function r($anArray,$aLabel='') {
   }
   if (is_array($anArray) || is_object($anArray)) {
     $someText = "<p><pre>".print_r($anArray,TRUE)."</pre></p>";
-    echo $someText;
   } else {
     $someText = "<p><b>".$anArray."</b></p>";
   }
+  echo $someText;
   $out .= $someText;
   return $out;
 }
