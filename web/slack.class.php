@@ -9,7 +9,9 @@ class Slack {
   public function postTextToChannel($text='test',$channel) {
     $url = 'https://slack.com/api/chat.postMessage';
     $vars = array();
+    // $vars['text'] = "<".str_replace('/','\/',$text).">";
     $vars['text'] = $text;
+    // $vars['text'] = 'text';
     $vars['as_user'] = 'true';
     $vars['channel'] = $channel;
     if ($this->simulate) {
@@ -31,9 +33,23 @@ class Slack {
     $args = array();
     foreach ($vars as $k=>$v) {
       $args[]=$k.'='.urlencode($v);
+      // $args[]=$k.'='.$v;
     }
     $argString = implode($args,"&");
-    return file_get_contents($url."?".$argString);
+    $wholeThing = $url."?".$argString;
+    echo "<p>".$wholeThing."</p>";
+    // return file_get_contents($wholeThing);
+
+    $curl_handle=curl_init();
+    curl_setopt($curl_handle, CURLOPT_URL,$wholeThing);
+    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Slack Pack');
+    $result = curl_exec($curl_handle);
+    curl_close($curl_handle);
+
+    return $result;
+
   }
 
   // private function post_something($url,$vars,$debug=false) {

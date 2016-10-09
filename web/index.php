@@ -10,7 +10,12 @@ require_once 'slack.class.php';
 include_once 'config.php';
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
-$simulateChannel = getenv("SIMULATE_CHANNEL");
+
+if (isset($config->simulate_channel)) {
+  $simulateChannel = $config->simulate_channel;
+} else {
+  $simulateChannel = getenv("SIMULATE_CHANNEL");
+}
 
 if (isset($config->slack_token)) {
   $slackToken = $config->slack_token;
@@ -42,22 +47,20 @@ if ($pocketConsumerKey) {
 
 echo '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
 
-print_r(var_dump(get_defined_vars()));
-
-exit;
-
 $simulate = true;
 if (isset($_GET['live'])) {
   $simulate = false;
 }
 
-$toEmail = getenv('TO_EMAIL');
-echo "emails going to ".$toEmail;
+$skipWeekend = true;
+if (isset($_GET['doweekend'])) {
+  $skipWeekend = false;
+}
 
 $dayOfWeek = date("w");
-if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
+if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6) && $skipWeekend) {
   mailIt("Skipping on the weekend",$to_email,$to_email);
-  echo "Skipping on the weekend";
+  echo "<p>Skipping on the weekend</p>";
   exit;
 }
 
@@ -69,8 +72,9 @@ $slack = new Slack($slackToken,$simulateChannel,$simulate);
 $out = r($simulate,'simulate');
 
 // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
-foreach ($map as $tag=>$channel) {
+foreach ($config->map as $tag=>$channel) {
   $out .= r($tag);
+  echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
   $posts = $pocket->getAPost($tag);
   $thePosts = $posts->list;
   $out .= r($thePosts);
@@ -94,10 +98,14 @@ foreach ($map as $tag=>$channel) {
 
       // POST
       echo "<p>Posting...".$text." TO ".$channel."</p>";
+      echo "<p>Connecting to Slack</p>";
       $response = $slack->postTextToChannel($text,$channel);
+      echo "<p>Back from Slack...".$response."</p>";
       $out .= r($response,$channel);
+      echo "<p>Untagging...</p>";
       $response = $pocket->untagPost($id,$tag);
       $out .= r($response,'UNTAGGED');
+      echo "<p>Completed slack posting.</p>";
 
     } // THEPOSTS
 
@@ -105,6 +113,29 @@ foreach ($map as $tag=>$channel) {
 
 } // MAP
 
-mailIt($out,$toEmail,$toEmail);
+echo "<p>Completed all the tags.</p>";
+
+if (isset($config->sendgrid_api_key)) {
+  $apiKey = $config->sendgrid_api_key;
+} else {
+  $apiKey = getenv('SENDGRID_API_KEY');
+}
+if (!apiKey) {
+  die("No sendgrid key!");
+}
+
+if (isset($config->to_email)) {
+  $toEmail = $config->to_email;
+} else {
+  $toEmail = getenv('TO_EMAIL');
+}
+
+if (!$toEmail) {
+  die ("No to email address.");
+}
+
+echo "<p>emails going to ".$toEmail."</p>";
+
+mailIt($out,$toEmail,$toEmail,$apiKey);
 
 ?>

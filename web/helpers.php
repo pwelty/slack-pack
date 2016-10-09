@@ -17,18 +17,19 @@ function r($anArray,$aLabel='') {
   return $out;
 }
 
-function mailIt($html,$fromEmail,$toEmail) {
+function mailIt($html,$fromEmail,$toEmail,$key) {
+  echo "<p>Trying SendGrid.</p>";
+  $sendGridGoGo = new \SendGrid($key);
   $from = new SendGrid\Email(null,$fromEmail);
   $subject = "Slack Pack notification";
   $toEmailThing = new SendGrid\Email(null,$toEmail);
   $content = new SendGrid\Content("text/html", "<html>".$html."</html>");
   $mail = new SendGrid\Mail($from, $subject, $toEmailThing, $content);
-  $apiKey = getenv('SENDGRID_API_KEY');
-  $sendGridGoGo = new \SendGrid($apiKey);
+  echo "<p>Connecting...</p>";
   $response = $sendGridGoGo->client->mail()->send()->post($mail);
-  echo $response->statusCode();
-  echo $response->headers();
-  echo $response->body();
+  echo "<p>".$response->statusCode()."</p>";
+  echo "<p>".$response->headers()."</p>";
+  echo "<p>".$response->body()."</p>";
 }
 
 ?>
