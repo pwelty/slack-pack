@@ -1,27 +1,13 @@
 <?php
 
-echo '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
-
 require('../vendor/autoload.php');
 
 require_once 'helpers.php';
 require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
-$simulate = true;
-if (isset($_GET['live'])) {
-  $simulate = false;
-}
-
-$toEmail = getenv('TO_EMAIL');
-echo "emails going to ".$toEmail;
-
-$dayOfWeek = date("w");
-if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
-  mailIt("Skipping on the weekend",$to_email,$to_email);
-  echo "Skipping on the weekend";
-  exit;
-}
+// IMPORT THE CONFIG FILE, ESP. THE POCKET->SLACK CHANNELS MAP
+require_once 'config.php';
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
 $simulateChannel = getenv("SIMULATE_CHANNEL");
@@ -40,22 +26,44 @@ if (isset($config->pocket_consumer_key)) {
 
 if (isset($config->pocket_access_token)) {
   $pocketAccessToken = $config->pocket_access_token;
-} elseif (isset(getenv("POCKET_ACCESS_TOKEN"))){
-  $pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
-} elseif (isset($pocketConsumerKey)) {
-  // Ok, with the key we can do something
-  header('Location: /pocket-auth.php');
 } else {
-  die "You need to put the Pocket consumer key in the env vars or the config file before we can do anything.";
+  $pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
 }
 
+if ($pocketConsumerKey) {
+  // Ok, with the key we can do something
+  if (!$pocketAccessToken) {
+    header('Location: /pocket-auth.php');
+    exit;
+  }
+} else {
+  die("You need to put the Pocket consumer key in the env vars or the config file before we can do anything.");
+}
+
+echo '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
+
+print_r(var_dump(get_defined_vars()));
+
+exit;
+
+$simulate = true;
+if (isset($_GET['live'])) {
+  $simulate = false;
+}
+
+$toEmail = getenv('TO_EMAIL');
+echo "emails going to ".$toEmail;
+
+$dayOfWeek = date("w");
+if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
+  mailIt("Skipping on the weekend",$to_email,$to_email);
+  echo "Skipping on the weekend";
+  exit;
+}
 
 // CREATE COMM OBJECTS
 $pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate);
 $slack = new Slack($slackToken,$simulateChannel,$simulate);
-
-// IMPORT THE POCKET->SLACK CHANNELS MAP
-require_once('config.php');
 
 // START THE EMAIL REPORT VAR
 $out = r($simulate,'simulate');
