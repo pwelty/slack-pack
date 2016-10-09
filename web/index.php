@@ -7,7 +7,7 @@ require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
 // IMPORT THE CONFIG FILE, ESP. THE POCKET->SLACK CHANNELS MAP
-require_once 'config.php';
+include_once 'config.php';
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
 $simulateChannel = getenv("SIMULATE_CHANNEL");

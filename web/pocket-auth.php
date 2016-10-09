@@ -2,7 +2,7 @@
 
 require_once 'helpers.php';
 require_once 'pocket.class.php';
-require_once 'config.php';
+include_once 'config.php';
 
 if (isset($config->pocket_consumer_key)) {
   $key = $config->pocket_consumer_key;
