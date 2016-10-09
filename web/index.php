@@ -11,6 +11,12 @@ include_once 'config.php';
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
 
+if (isset($config->pocket_suffix)) {
+  $pocketSuffix = $config->pocket_suffix;
+} else {
+  $pocketSuffix = getenv("POCKET_SUFFIX");
+}
+
 if (isset($config->simulate_channel)) {
   $simulateChannel = $config->simulate_channel;
 } else {
@@ -35,15 +41,14 @@ if (isset($config->pocket_access_token)) {
   $pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
 }
 
-if ($pocketConsumerKey) {
-  // Ok, with the key we can do something
-  if (!$pocketAccessToken) {
+if (!$pocketConsumerKey) {
+  die("You need to put the Pocket consumer key in the env vars or the config file before we can do anything.");
+}
+
+if ($pocketConsumerKey && !$pocketAccessToken) {
     header('Location: /pocket-auth.php');
     exit;
   }
-} else {
-  die("You need to put the Pocket consumer key in the env vars or the config file before we can do anything.");
-}
 
 echo '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
 
@@ -65,7 +70,7 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6) && $skipWeekend) {
 }
 
 // CREATE COMM OBJECTS
-$pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate);
+$pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate,$pocketSuffix);
 $slack = new Slack($slackToken,$simulateChannel,$simulate);
 
 // START THE EMAIL REPORT VAR
@@ -105,7 +110,7 @@ foreach ($config->map as $tag=>$channel) {
       echo "<p>Untagging...</p>";
       $response = $pocket->untagPost($id,$tag);
       $out .= r($response,'UNTAGGED');
-      echo "<p>Completed slack posting.</p>";
+      echo "<p>Completed slack posting for this tag.</p>";
 
     } // THEPOSTS
 

@@ -4,12 +4,13 @@ class Pocket {
 	private $consumerKey = '';
 	private $accessToken = '';
 	private $simulate = true;
+	private $suffix = '-posted';
 
 	function untagPost($id,$tag) {
 		$endpoint = 'https://getpocket.com/v3/send';
 		$vars = array();
-		$vars['consumer_key'] = $this->consumer_key;
-		$vars['access_token'] = $this->access_token;
+		$vars['consumer_key'] = $this->consumerKey;
+		$vars['access_token'] = $this->accessToken;
 		$vars['actions'] = array();
 		$action1 = array();
 		$action1['action'] = 'tags_remove';
@@ -18,7 +19,7 @@ class Pocket {
 		$action2 = array();
 		$action2['action'] = 'tags_add';
 		$action2['item_id'] = $id;
-		$action2['tags'] = $tag.'-posted';
+		$action2['tags'] = $tag.$this->suffix;
 		$vars['actions'][] = $action1;
 		$vars['actions'][] = $action2;
 		if ($this->simulate) {
@@ -27,7 +28,7 @@ class Pocket {
 		return $this->postSomething($endpoint,$vars);
 	}
 
-	public function getAPost($tag='sg-slack-general') {
+	public function getAPost($tag='sg-general') {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
 		$vars['consumer_key'] = $this->consumerKey;
@@ -40,10 +41,11 @@ class Pocket {
 		return $response;
 	}
 
-	function __construct($consumerKey,$accessToken,$action='',$simulate=true) {
+	function __construct($consumerKey,$accessToken,$action='',$simulate=true,$suffix='-posted') {
 		$this->consumerKey = $consumerKey;
 		$this->accessToken = $accessToken;
 		$this->simulate = $simulate;
+		$this->suffix = $suffix;
 		if ($action=='authorized') {
 			echo ("back from Pocket ... ");
 			$code=$_GET['code'];

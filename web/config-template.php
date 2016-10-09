@@ -6,7 +6,7 @@ $config->map = array();
 $config->map['POCKET_TAG_NAME']='SLACK_CHANNEL_NAME'; // NOTE: don't need "#" in front
 //$map['OTHER POCKET_TAG_NAME']='OTHER_DESTINATION_SLACK_CHANNEL_NAME';
 
-$config->suffix = "-posted"; // not used right now but maybe
+$config->pocket_suffix = "-posted"; // what will be appended to pocket tags when they are posted
 
 $config->simulate_channel = ''; // where you want your simulate slack messages to go. Use "@username" to send to yourself.
 
