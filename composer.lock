@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5cdd795e5f91bbd158a1a2c034b371f0",
-    "content-hash": "f7a6eb9a47b3715b51c2ac8a9782f837",
+    "hash": "ce5f95479577b62cb474133e28ae0955",
+    "content-hash": "aa82c04d066e4814f0ef6ef628b274be",
     "packages": [
         {
             "name": "sendgrid/php-http-client",
@@ -61,20 +61,20 @@
         },
         {
             "name": "sendgrid/sendgrid",
-            "version": "5.0.4",
+            "version": "5.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sendgrid/sendgrid-php.git",
-                "reference": "1050d195525ff529036e7804f2c303261d65dca3"
+                "reference": "fbf43e7851463c49d6d45382151fbd2e90028af3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/1050d195525ff529036e7804f2c303261d65dca3",
-                "reference": "1050d195525ff529036e7804f2c303261d65dca3",
+                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/fbf43e7851463c49d6d45382151fbd2e90028af3",
+                "reference": "fbf43e7851463c49d6d45382151fbd2e90028af3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3",
+                "php": ">=5.6",
                 "sendgrid/php-http-client": "3.1.0"
             },
             "replace": {
@@ -103,22 +103,22 @@
                 "send",
                 "sendgrid"
             ],
-            "time": "2016-07-08 02:55:23"
+            "time": "2016-09-13 17:27:23"
         }
     ],
     "packages-dev": [
         {
             "name": "heroku/heroku-buildpack-php",
-            "version": "v107",
+            "version": "v112",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heroku/heroku-buildpack-php.git",
-                "reference": "118cfbb3e6940bd6c1a953b0c482f458582162a6"
+                "reference": "5de1d2796304f74568901c88fed16885af179e93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/118cfbb3e6940bd6c1a953b0c482f458582162a6",
-                "reference": "118cfbb3e6940bd6c1a953b0c482f458582162a6",
+                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/5de1d2796304f74568901c88fed16885af179e93",
+                "reference": "5de1d2796304f74568901c88fed16885af179e93",
                 "shasum": ""
             },
             "bin": [
@@ -149,7 +149,7 @@
                 "nginx",
                 "php"
             ],
-            "time": "2016-06-17 22:36:40"
+            "time": "2016-09-20 20:47:04"
         }
     ],
     "aliases": [],
@@ -158,7 +158,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0.0"
+        "php": "~5.6"
     },
     "platform-dev": []
 }
