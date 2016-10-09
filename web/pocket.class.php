@@ -45,7 +45,7 @@ class Pocket {
 		$this->accessToken = $accessToken;
 		$this->simulate = $simulate;
 		if ($action=='authorized') {
-			echo ("back");
+			echo ("back from Pocket ... ");
 			$code=$_GET['code'];
 			$endpoint = 'https://getpocket.com/v3/oauth/authorize';
 			$vars = array();
@@ -53,15 +53,15 @@ class Pocket {
 			$vars['code'] = $code;
 			$response = $this->postSomething($endpoint,$vars,true);
 			echo "put this access token in the env vars";
-			$this->r($response);
+			r($response);
 		} elseif($action=='pocket-auth') {
 			// Connect to Pocket and get a token
 			$vars = array();
 			$vars['consumer_key'] = $this->consumerKey;
 			$vars['redirect_uri'] = 'http://'.$_SERVER['HTTP_HOST'].'/pocket-authorized.php';
 			$endpoint = 'https://getpocket.com/v3/oauth/request';
-			$response = $this->post_something($endpoint,$vars);
-			$this->r($response);
+			$response = $this->postSomething($endpoint,$vars);
+			//r($response);
 			$code = $response->code;
 			$redirectUri = htmlentities($vars['redirect_uri'].'?code='.$code);
 			$newUrl = 'https://getpocket.com/auth/authorize?request_token='.$code.'&redirect_uri='.$redirectUri;

@@ -24,10 +24,31 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6)) {
 }
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
-$slackToken = getenv('SLACK_TOKEN');
-$pocketConsumerKey = getenv("POCKET_CONSUMER_KEY");
-$pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
 $simulateChannel = getenv("SIMULATE_CHANNEL");
+
+if (isset($config->slack_token)) {
+  $slackToken = $config->slack_token;
+} else {
+  $slackToken = getenv('SLACK_TOKEN');
+}
+
+if (isset($config->pocket_consumer_key)) {
+  $pocketConsumerKey = $config->pocket_consumer_key;
+} else {
+  $pocketConsumerKey = getenv("POCKET_CONSUMER_KEY");
+}
+
+if (isset($config->pocket_access_token)) {
+  $pocketAccessToken = $config->pocket_access_token;
+} elseif (isset(getenv("POCKET_ACCESS_TOKEN"))){
+  $pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
+} elseif (isset($pocketConsumerKey)) {
+  // Ok, with the key we can do something
+  header('Location: /pocket-auth.php');
+} else {
+  die "You need to put the Pocket consumer key in the env vars or the config file before we can do anything.";
+}
+
 
 // CREATE COMM OBJECTS
 $pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate);
