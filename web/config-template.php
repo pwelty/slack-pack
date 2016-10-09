@@ -2,9 +2,7 @@
 
 $config = new stdClass;
 
-$config->map = array();
-$config->map['POCKET_TAG_NAME']='SLACK_CHANNEL_NAME'; // NOTE: don't need "#" in front
-//$map['OTHER POCKET_TAG_NAME']='OTHER_DESTINATION_SLACK_CHANNEL_NAME';
+$config->channel_map = '{"POCKET_TAG_NAME":"SLACK_CHANNEL_NAME","OTHER POCKET_TAG_NAME":"OTHER_DESTINATION_SLACK_CHANNEL_NAME"}';
 
 $config->pocket_suffix = "-posted"; // what will be appended to pocket tags when they are posted
 

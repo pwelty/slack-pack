@@ -41,6 +41,13 @@ if (isset($config->pocket_access_token)) {
   $pocketAccessToken = getenv("POCKET_ACCESS_TOKEN");
 }
 
+if (isset($config->channel_map)) {
+  $map = $config->channel_map;
+} else {
+  $map = getenv("CHANNEL_MAP");
+}
+$channelMap = json_decode($map);
+
 if (!$pocketConsumerKey) {
   die("You need to put the Pocket consumer key in the env vars or the config file before we can do anything.");
 }
@@ -77,7 +84,7 @@ $slack = new Slack($slackToken,$simulateChannel,$simulate);
 $out = r($simulate,'simulate');
 
 // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
-foreach ($config->map as $tag=>$channel) {
+foreach ($channelMap as $tag=>$channel) {
   $out .= r($tag);
   echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
   $posts = $pocket->getAPost($tag);
