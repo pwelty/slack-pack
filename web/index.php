@@ -53,9 +53,9 @@ if (!$pocketConsumerKey) {
 }
 
 if ($pocketConsumerKey && !$pocketAccessToken) {
-    header('Location: /pocket-auth.php');
-    exit;
-  }
+  header('Location: /pocket-auth.php');
+  exit;
+}
 
 echo '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
 
