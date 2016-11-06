@@ -1,16 +1,21 @@
 <?php
 
-function r($anArray,$aLabel='') {
+function r($aSomething,$aLabel='') {
   $out = '';
   if ($aLabel) {
-    $someText = "<p><b>".$aLabel."=</b></p>";
-    echo $someText;
-    $out .= $someText;
-  }
-  if (is_array($anArray) || is_object($anArray)) {
-    $someText = "<p><pre>".print_r($anArray,TRUE)."</pre></p>";
+    $theLabel = "<b>".$aLabel."=</b>";
+    //echo $someText;
+    //$out .= $someText;
   } else {
-    $someText = "<p><b>".$anArray."</b></p>";
+    $theLabel = '';
+  }
+  if (is_array($aSomething) || is_object($aSomething)) {
+    if ($aLabel) {
+      $theLabel .= "<br/>";
+    }
+    $someText = "<p>".$theLabel."<pre>".print_r($aSomething,TRUE)."</pre></p>";
+  } else {
+    $someText = "<p>".$theLabel."<b>".$aSomething."</b></p>";
   }
   echo $someText;
   $out .= $someText;
