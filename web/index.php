@@ -72,24 +72,25 @@ if (isset($_GET['doweekend'])) {
 $dayOfWeek = date("w");
 if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6) && $skipWeekend) {
   mailIt("Skipping on the weekend",$to_email,$to_email);
-  echo "<p>Skipping on the weekend</p>";
-  exit;
+  die("<p>Skipping on the weekend</p>");
 }
 
 // CREATE COMM OBJECTS
 $pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate,$pocketSuffix);
-$slack = new Slack($slackToken,$simulateChannel,$simulate);
+$slack  = new Slack($slackToken,$simulateChannel,$simulate);
 
 // START THE EMAIL REPORT VAR
 $out = r($simulate,'simulate');
 
+$out .= r($channelMap,'map');
+
 // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
 foreach ($channelMap as $tag=>$channel) {
-  $out .= r($tag);
+  // $out .= r($tag);
   echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
   $posts = $pocket->getAPost($tag);
   $thePosts = $posts->list;
-  $out .= r($thePosts);
+  // $out .= r($thePosts);
 
   if (!empty($thePosts)) {
 
@@ -109,14 +110,17 @@ foreach ($channelMap as $tag=>$channel) {
       // r($excerpt,"excerpt");
 
       // POST
-      echo "<p>Posting...".$text." TO ".$channel."</p>";
+      $ttt = "<p>Posting ".$title." (".$text.") TO ".$channel." (from ".$tag.")</p>";
+      echo $ttt;
+      $out .= $ttt;
+
       echo "<p>Connecting to Slack</p>";
       $response = $slack->postTextToChannel($text,$channel);
       echo "<p>Back from Slack...".$response."</p>";
-      $out .= r($response,$channel);
+      // $out .= r($response,$channel);
       echo "<p>Untagging...</p>";
       $response = $pocket->untagPost($id,$tag);
-      $out .= r($response,'UNTAGGED');
+      // $out .= r($response,'UNTAGGED');
       echo "<p>Completed slack posting for this tag.</p>";
 
     } // THEPOSTS
