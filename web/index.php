@@ -64,6 +64,11 @@ if (isset($_GET['live'])) {
   $simulate = false;
 }
 
+$specifiedTag = '';
+if (isset($_GET['tag'])) {
+  $specifiedTag = $_GET['tag'];
+}
+
 $skipWeekend = true;
 if (isset($_GET['doweekend'])) {
   $skipWeekend = false;
@@ -81,11 +86,19 @@ $slack  = new Slack($slackToken,$simulateChannel,$simulate);
 
 // START THE EMAIL REPORT VAR
 $out = r($simulate,'simulate');
-
+$out .= r($specifiedTag,'specified tag');
+$out .= r($_SERVER['SERVER_NAME'],'server');
 $out .= r($channelMap,'map');
 
 // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
 foreach ($channelMap as $tag=>$channel) {
+
+  if ($specifiedTag!='') {
+    if ($tag!=$specifiedTag) {
+      $out .= "<p>Skipped ".$tag."</p>";
+      continue;
+    }
+  }
   // $out .= r($tag);
   echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
   $posts = $pocket->getAPost($tag);
@@ -114,7 +127,7 @@ foreach ($channelMap as $tag=>$channel) {
       echo $ttt;
       $out .= $ttt;
 
-      echo "<p>Connecting to Slack</p>";
+      echo "<p>Connecting to Slack to post in the ".$channel." channel</p>";
       $response = $slack->postTextToChannel($text,$channel);
       echo "<p>Back from Slack...".$response."</p>";
       // $out .= r($response,$channel);
