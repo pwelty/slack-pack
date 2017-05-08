@@ -91,6 +91,7 @@ $out .= r($_SERVER['SERVER_NAME'],'server');
 $out .= r($channelMap,'map');
 
 // LOOP THROUGH THE MAP, STARTING WITH THE (POCKET) TAGS
+$thePosts = array();
 foreach ($channelMap as $tag=>$channel) {
 
   if ($specifiedTag!='') {
@@ -102,45 +103,30 @@ foreach ($channelMap as $tag=>$channel) {
   // $out .= r($tag);
   echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
   $posts = $pocket->getAPost($tag);
-  $thePosts = $posts->list;
-  // $out .= r($thePosts);
-
-  if (!empty($thePosts)) {
-
-    foreach ($thePosts as $aPost) {
-
-      // BUILD THE POST TEXT
-      $excerpt = $aPost->excerpt;
-      $url = $aPost->resolved_url;
-      $loc = strpos($url,"?");
-      if ($loc) {
-        $url = substr($url,0,$loc);
-      }
-      $title = $aPost->resolved_title;
-      $id = $aPost->item_id;
-      $text = $url;
-      // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
-      // r($excerpt,"excerpt");
-
-      // POST
-      $ttt = "<p>Posting ".$title." (".$text.") TO ".$channel." (from ".$tag.")</p>";
-      echo $ttt;
-      $out .= $ttt;
-
-      echo "<p>Connecting to Slack to post in the ".$channel." channel</p>";
-      $response = $slack->postTextToChannel($text,$channel);
-      echo "<p>Back from Slack...".$response."</p>";
-      // $out .= r($response,$channel);
-      echo "<p>Untagging...</p>";
-      $response = $pocket->untagPost($id,$tag);
-      // $out .= r($response,'UNTAGGED');
-      echo "<p>Completed slack posting for this tag.</p>";
-
-    } // THEPOSTS
-
+  if (!empty($posts->list)) {
+    foreach ($posts->list as $post) {
+      $post->tag = $tag;
+      $post->channel = $channel;
+      $thePosts[] = $post;
+    }
   }
+}
 
-} // MAP
+if (!empty($thePosts)) {
+  $out .= r($thePosts);
+  $numberPosts = count($thePosts);
+  $out .= $numberPosts;
+  $thePostIndex = rand(0,$numberPosts-1);
+  $thePost = $thePosts[$thePostIndex];
+  $out .= r($thePost);
+  postAPost($thePost);
+  // foreach ($thePosts as $aPost) {
+  //
+  //   $postAPost($aPost);
+  //
+  // } // THEPOSTS
+}
+
 
 echo "<p>Completed all the tags.</p>";
 
@@ -149,7 +135,7 @@ if (isset($config->sendgrid_api_key)) {
 } else {
   $apiKey = getenv('SENDGRID_API_KEY');
 }
-if (!apiKey) {
+if (!$apiKey) {
   die("No sendgrid key!");
 }
 
@@ -166,5 +152,36 @@ if (!$toEmail) {
 echo "<p>emails going to ".$toEmail."</p>";
 
 mailIt($out,$toEmail,$toEmail,$apiKey);
+
+function postAPost($aPost) {
+  global $slack,$pocket,$out;
+  // BUILD THE POST TEXT
+  $excerpt = $aPost->excerpt;
+  $url = $aPost->resolved_url;
+  $loc = strpos($url,"?");
+  if ($loc) {
+    $url = substr($url,0,$loc);
+  }
+  $title = $aPost->resolved_title;
+  $id = $aPost->item_id;
+  $text = $url;
+  // $text = "*".$title."*\n".$excerpt."\n<".$url."> ";
+  // r($excerpt,"excerpt");
+
+  // POST
+  $ttt = "<p>Posting ".$title." (".$text.") TO ".$aPost->channel." (from ".$aPost->tag.")</p>";
+  echo $ttt;
+  $out .= $ttt;
+
+  echo "<p>Connecting to Slack to post in the ".$aPost->channel." channel</p>";
+  $response = $slack->postTextToChannel($text,$aPost->channel);
+  echo "<p>Back from Slack...".$response."</p>";
+  // $out .= r($response,$channel);
+  echo "<p>Untagging...</p>";
+  $response = $pocket->untagPost($id,$aPost->tag);
+  // $out .= r($response,'UNTAGGED');
+  echo "<p>Completed slack posting for this tag.</p>";
+
+}
 
 ?>
