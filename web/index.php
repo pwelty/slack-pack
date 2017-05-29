@@ -2,6 +2,13 @@
 
 require('../vendor/autoload.php');
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$log = new Logger('my_logger');
+$log->pushHandler(new StreamHandler('php://stderr', Logger::INFO));
+$log->addInfo('Starting app');
+
 require_once 'helpers.php';
 require_once 'pocket.class.php';
 require_once 'slack.class.php';
@@ -54,7 +61,7 @@ if (!$pocketConsumerKey) {
 
 if ($pocketConsumerKey && !$pocketAccessToken) {
   header('Location: /pocket-auth.php');
-  error_log("Redirecting to get Pocket access token");
+  $log->addInfo("Redirecting to get Pocket access token");
   exit;
 }
 
@@ -81,7 +88,7 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6) && $skipWeekend) {
   die("<p>Skipping on the weekend</p>");
 }
 
-error_log("Seems ok. Starting!");
+$log->addInfo("Seems ok. Starting!");
 
 // CREATE COMM OBJECTS
 $pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate,$pocketSuffix);
