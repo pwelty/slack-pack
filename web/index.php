@@ -54,6 +54,7 @@ if (!$pocketConsumerKey) {
 
 if ($pocketConsumerKey && !$pocketAccessToken) {
   header('Location: /pocket-auth.php');
+  error_log("Redirecting to get Pocket access token");
   exit;
 }
 
@@ -79,6 +80,8 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6) && $skipWeekend) {
   mailIt("Skipping on the weekend",$to_email,$to_email);
   die("<p>Skipping on the weekend</p>");
 }
+
+error_log("Seems ok. Starting!");
 
 // CREATE COMM OBJECTS
 $pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate,$pocketSuffix);
