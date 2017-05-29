@@ -7,14 +7,18 @@ use Monolog\Handler\StreamHandler;
 
 $log = new Logger('my_logger');
 $log->pushHandler(new StreamHandler('php://stderr', Logger::INFO));
-$log->addInfo('Starting app');
+$log->addInfo('Starting app',array('starting'=>'true'),'extra');
 
 require_once 'helpers.php';
 require_once 'pocket.class.php';
 require_once 'slack.class.php';
 
 // IMPORT THE CONFIG FILE, ESP. THE POCKET->SLACK CHANNELS MAP
-include_once 'config.php';
+if (file_exists('config.php')) {
+	include_once 'config.php';
+} else {
+	$log->addWarning('Didn\'t find config file. Hope there are some env vars!');
+}
 
 // GET ENV VARS. FOR LOCAL USING .HTACCESS FILE
 
