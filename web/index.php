@@ -117,7 +117,9 @@ foreach ($channelMap as $tag=>$channel) {
   }
   // $out .= r($tag);
   echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
-  $posts = $pocket->getAPost($tag);
+
+  $posts = $pocket->getPosts($tag,0);
+  
   if (!empty($posts->list)) {
     foreach ($posts->list as $post) {
       $post->tag = $tag;
@@ -127,13 +129,22 @@ foreach ($channelMap as $tag=>$channel) {
   }
 }
 
+function cmp($a, $b) {
+  return $a->time_added < $b->time_added;
+}
+usort($thePosts, "cmp");
+
+
+
 if (!empty($thePosts)) {
   $out .= r($thePosts);
   $numberPosts = count($thePosts);
   $out .= $numberPosts;
-  $thePostIndex = rand(0,$numberPosts-1);
+//   $thePostIndex = rand(0,$numberPosts-1);
+  $thePostIndex = 0;
   $thePost = $thePosts[$thePostIndex];
   $out .= r($thePost);
+  $out .= r(date("r",$thePost->time_added));
   postAPost($thePost);
   // foreach ($thePosts as $aPost) {
   //

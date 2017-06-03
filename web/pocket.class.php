@@ -28,13 +28,13 @@ class Pocket {
 		return $this->postSomething($endpoint,$vars);
 	}
 
-	public function getAPost($tag='sg-general') {
+	public function getPosts($tag='sg-general',$count='100') {
 		$endpoint = 'https://getpocket.com/v3/get';
 		$vars = array();
 		$vars['consumer_key'] = $this->consumerKey;
 		$vars['access_token'] = $this->accessToken;
 		$vars['tag'] = $tag;
-		$vars['count'] = '1';
+		$vars['count'] = $count;
 		$vars['sort'] = 'newest';
 		$vars['detailType'] = 'simple';
 		$response = $this->postSomething($endpoint,$vars);
