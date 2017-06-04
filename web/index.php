@@ -137,9 +137,16 @@ usort($thePosts, "cmp");
 
 
 if (!empty($thePosts)) {
-  $out .= r($thePosts);
+
+//  $out .= r($thePosts);
+
   $numberPosts = count($thePosts);
-  $out .= $numberPosts;
+  $out .= "<p>".$numberPosts . " posts</p>";
+
+	foreach ($thePosts as $aPost) {
+		$out .= "<p>".$aPost->resolved_title . "(".date("m/d/Y",$aPost->time_added).") [".$aPost->channel."]</p>";
+	}
+	
 //   $thePostIndex = rand(0,$numberPosts-1);
   $thePostIndex = 0;
   $thePost = $thePosts[$thePostIndex];
