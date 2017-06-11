@@ -1,10 +1,12 @@
 {
   "require": {
-    "php": "~5.6",
+    "php": "^7.0",
     "sendgrid/sendgrid": "~5.0.4",
-    "monolog/monolog": "^1.22"
+    "monolog/monolog": "^1.22",
+    "pwelty/pocket-poll": "^1.0"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
-  }
+  },
+  "minimum-stability": "stable"
 }

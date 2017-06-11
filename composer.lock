@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c844deb63aa8c9e8f3c044ef7441363",
+    "hash": "3da2591fd30d35dede46fd3d05924dad",
+    "content-hash": "f21e7dfabd746c71aae2461f97213710",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -82,7 +83,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-03-13T07:08:03+00:00"
+            "time": "2017-03-13 07:08:03"
         },
         {
             "name": "psr/log",
@@ -129,7 +130,48 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2016-10-10 12:19:37"
+        },
+        {
+            "name": "pwelty/pocket-poll",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pwelty/pocket-poll.git",
+                "reference": "7d016bff65d1f52823c66d69b6893befd51f7d2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pwelty/pocket-poll/zipball/7d016bff65d1f52823c66d69b6893befd51f7d2c",
+                "reference": "7d016bff65d1f52823c66d69b6893befd51f7d2c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "heroku/heroku-buildpack-php": "^121.0",
+                "phpunit/phpunit": "4.0.*",
+                "vlucas/phpdotenv": "^2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PWelty\\PocketPoll\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Welty",
+                    "email": "ponch@paulwelty.com"
+                }
+            ],
+            "description": "Package to access Pocket",
+            "time": "2017-06-11 14:50:10"
         },
         {
             "name": "sendgrid/php-http-client",
@@ -181,7 +223,7 @@
                 "rest",
                 "sendgrid"
             ],
-            "time": "2016-06-11T00:47:24+00:00"
+            "time": "2016-06-11 00:47:24"
         },
         {
             "name": "sendgrid/sendgrid",
@@ -227,22 +269,22 @@
                 "send",
                 "sendgrid"
             ],
-            "time": "2016-09-13T17:27:23+00:00"
+            "time": "2016-09-13 17:27:23"
         }
     ],
     "packages-dev": [
         {
             "name": "heroku/heroku-buildpack-php",
-            "version": "v112",
+            "version": "v121",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heroku/heroku-buildpack-php.git",
-                "reference": "5de1d2796304f74568901c88fed16885af179e93"
+                "reference": "727aa850a02a7af94c9225237464be8e8c8ff6db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/5de1d2796304f74568901c88fed16885af179e93",
-                "reference": "5de1d2796304f74568901c88fed16885af179e93",
+                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/727aa850a02a7af94c9225237464be8e8c8ff6db",
+                "reference": "727aa850a02a7af94c9225237464be8e8c8ff6db",
                 "shasum": ""
             },
             "bin": [
@@ -273,7 +315,7 @@
                 "nginx",
                 "php"
             ],
-            "time": "2016-09-20T20:47:04+00:00"
+            "time": "2017-03-27 23:33:27"
         }
     ],
     "aliases": [],
@@ -282,7 +324,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~5.6"
+        "php": "^7.0"
     },
     "platform-dev": []
 }

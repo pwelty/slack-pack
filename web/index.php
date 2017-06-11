@@ -4,14 +4,16 @@ require('../vendor/autoload.php');
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use \PWelty\PocketPoll\Pocket;
 
 $log = new Logger('my_logger');
 $log->pushHandler(new StreamHandler('php://stderr', Logger::INFO));
 $log->addInfo('Starting app',array('starting'=>'whatevs'),'extra');
 
 require_once 'helpers.php';
-require_once 'pocket.class.php';
+// require_once 'pocket.class.php';
 require_once 'slack.class.php';
+
 
 // IMPORT THE CONFIG FILE, ESP. THE POCKET->SLACK CHANNELS MAP
 if (file_exists('config.php')) {
@@ -96,8 +98,17 @@ if (!$simulate && ($dayOfWeek==0 || $dayOfWeek==6) && $skipWeekend) {
 $log->addInfo("Seems ok. Starting!");
 
 // CREATE COMM OBJECTS
-$pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate,$pocketSuffix);
+// $pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,'action',$simulate,$pocketSuffix);
+$pocket = new Pocket($pocketConsumerKey,$pocketAccessToken,$simulate);
+
+// $result = $pocket->getPosts('sg-general-posted','1','oldest','complete');
+// $list = $result->list;
+// print_r($list);
+// exit;
+
+
 $slack  = new Slack($slackToken,$simulateChannel,$simulate);
+
 
 // START THE EMAIL REPORT VAR
 $out = r($simulate,'simulate');
@@ -119,7 +130,7 @@ foreach ($channelMap as $tag=>$channel) {
   echo "<p>Connecting to Pocket, looking for ".$tag."</p>";
 
   $posts = $pocket->getPosts($tag,0);
-  
+
   if (!empty($posts->list)) {
     foreach ($posts->list as $post) {
       $post->tag = $tag;
@@ -146,7 +157,7 @@ if (!empty($thePosts)) {
 	foreach ($thePosts as $aPost) {
 		$out .= "<p>".$aPost->resolved_title . "(".date("m/d/Y",$aPost->time_added).") [".$aPost->channel."]</p>";
 	}
-	
+
 //   $thePostIndex = rand(0,$numberPosts-1);
   $thePostIndex = 0;
   $thePost = $thePosts[$thePostIndex];
@@ -211,6 +222,7 @@ function postAPost($aPost) {
   echo "<p>Back from Slack...".$response."</p>";
   // $out .= r($response,$channel);
   echo "<p>Untagging...</p>";
+	$response = $pocket->tagPost($id,$aPost->tag.$pocketSuffix);
   $response = $pocket->untagPost($id,$aPost->tag);
   // $out .= r($response,'UNTAGGED');
   echo "<p>Completed slack posting for this tag.</p>";
