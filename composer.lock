@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3da2591fd30d35dede46fd3d05924dad",
-    "content-hash": "f21e7dfabd746c71aae2461f97213710",
+    "content-hash": "acf4eeea90b2eed9fe77d0c828a02bb7",
     "packages": [
         {
             "name": "monolog/monolog",
-            "version": "1.22.1",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0"
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1e044bc4b34e91743943479f1be7a1d5eb93add0",
-                "reference": "1e044bc4b34e91743943479f1be7a1d5eb93add0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +38,7 @@
                 "phpunit/phpunit-mock-objects": "2.3.0",
                 "ruflin/elastica": ">=0.90 <3.0",
                 "sentry/sentry": "^0.13",
-                "swiftmailer/swiftmailer": "~5.3"
+                "swiftmailer/swiftmailer": "^5.3|^6.0"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -83,7 +82,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-03-13 07:08:03"
+            "time": "2017-06-19T01:22:40+00:00"
         },
         {
             "name": "psr/log",
@@ -130,24 +129,24 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "pwelty/pocket-poll",
-            "version": "1.0",
+            "version": "1.01",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pwelty/pocket-poll.git",
-                "reference": "7d016bff65d1f52823c66d69b6893befd51f7d2c"
+                "reference": "d22ced1a45f63bc18fcf454d7893d56565d74368"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pwelty/pocket-poll/zipball/7d016bff65d1f52823c66d69b6893befd51f7d2c",
-                "reference": "7d016bff65d1f52823c66d69b6893befd51f7d2c",
+                "url": "https://api.github.com/repos/pwelty/pocket-poll/zipball/d22ced1a45f63bc18fcf454d7893d56565d74368",
+                "reference": "d22ced1a45f63bc18fcf454d7893d56565d74368",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": ">=5.6"
             },
             "require-dev": {
                 "heroku/heroku-buildpack-php": "^121.0",
@@ -171,7 +170,7 @@
                 }
             ],
             "description": "Package to access Pocket",
-            "time": "2017-06-11 14:50:10"
+            "time": "2017-06-22T18:52:06+00:00"
         },
         {
             "name": "sendgrid/php-http-client",
@@ -223,7 +222,7 @@
                 "rest",
                 "sendgrid"
             ],
-            "time": "2016-06-11 00:47:24"
+            "time": "2016-06-11T00:47:24+00:00"
         },
         {
             "name": "sendgrid/sendgrid",
@@ -269,7 +268,7 @@
                 "send",
                 "sendgrid"
             ],
-            "time": "2016-09-13 17:27:23"
+            "time": "2016-09-13T17:27:23+00:00"
         }
     ],
     "packages-dev": [
@@ -315,7 +314,7 @@
                 "nginx",
                 "php"
             ],
-            "time": "2017-03-27 23:33:27"
+            "time": "2017-03-27T23:33:27+00:00"
         }
     ],
     "aliases": [],
@@ -324,7 +323,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0"
+        "php": ">=5.6"
     },
-    "platform-dev": []
+    "platform-dev": {
+        "php": ">=5.6"
+    }
 }
