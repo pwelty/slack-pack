@@ -62,6 +62,25 @@ if (isset($config->channel_map)) {
 }
 $channelMap = json_decode($map);
 
+if (isset($config->sendgrid_api_key)) {
+  $apiKey = $config->sendgrid_api_key;
+} else {
+  $apiKey = getenv('SENDGRID_API_KEY');
+}
+if (!$apiKey) {
+  die("No sendgrid key!");
+}
+
+if (isset($config->to_email)) {
+  $toEmail = $config->to_email;
+} else {
+  $toEmail = getenv('TO_EMAIL');
+}
+
+if (!$toEmail) {
+  die ("No to email address.");
+}
+
 if (!$pocketConsumerKey) {
   die("You need to put the Pocket consumer key in the env vars or the config file before we can do anything.");
 }
@@ -85,6 +104,8 @@ if (!$pocketSuffix) {
 if (!$channelMap) {
 	die("No channel map!");
 }
+
+
 
 if ($pocketConsumerKey && !$pocketAccessToken) {
   header('Location: /pocket-auth.php');
@@ -193,25 +214,6 @@ if (!empty($thePosts)) {
 
 
 echo "<p>Completed all the tags.</p>";
-
-if (isset($config->sendgrid_api_key)) {
-  $apiKey = $config->sendgrid_api_key;
-} else {
-  $apiKey = getenv('SENDGRID_API_KEY');
-}
-if (!$apiKey) {
-  die("No sendgrid key!");
-}
-
-if (isset($config->to_email)) {
-  $toEmail = $config->to_email;
-} else {
-  $toEmail = getenv('TO_EMAIL');
-}
-
-if (!$toEmail) {
-  die ("No to email address.");
-}
 
 echo "<p>emails going to ".$toEmail."</p>";
 
