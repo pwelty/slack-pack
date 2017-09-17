@@ -67,7 +67,7 @@ if (!$pocketConsumerKey) {
 }
 
 if (!$pocketAccessToken) {
-	die("No Pocket access token!")
+	die("No Pocket access token!");
 }
 
 if (!$slackToken) {
