@@ -66,6 +66,26 @@ if (!$pocketConsumerKey) {
   die("You need to put the Pocket consumer key in the env vars or the config file before we can do anything.");
 }
 
+if (!$pocketAccessToken) {
+	die("No Pocket access token!")
+}
+
+if (!$slackToken) {
+	die("No Slack token!");
+}
+
+if (!$simulateChannel) {
+	die("No simulation channel!");
+}
+
+if (!$pocketSuffix) {
+	die("No Pocket suffix!");
+}
+
+if (!$channelMap) {
+	die("No channel map!");
+}
+
 if ($pocketConsumerKey && !$pocketAccessToken) {
   header('Location: /pocket-auth.php');
   $log->addInfo("Redirecting to get Pocket access token");
@@ -222,7 +242,8 @@ function postAPost($aPost) {
   echo "<p>Back from Slack...".$response."</p>";
   // $out .= r($response,$channel);
   echo "<p>Untagging...</p>";
-	$response = $pocket->tagPost($id,$aPost->tag.$pocketSuffix);
+  echo "<p>To be specific ... " . $id . " - " . $aPost->tag.$pocketSuffix . "</p>";
+  $response = $pocket->tagPost($id,$aPost->tag.$pocketSuffix);
   $response = $pocket->untagPost($id,$aPost->tag);
   // $out .= r($response,'UNTAGGED');
   echo "<p>Completed slack posting for this tag.</p>";
