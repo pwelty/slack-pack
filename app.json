@@ -1,0 +1,44 @@
+{
+  "name": "slack-pack",
+  "scripts": {
+  },
+  "env": {
+    "CHANNEL_MAP": {
+      "required": true
+    },
+    "PAPERTRAIL_API_TOKEN": {
+      "required": true
+    },
+    "POCKET_ACCESS_TOKEN": {
+      "required": true
+    },
+    "POCKET_CONSUMER_KEY": {
+      "required": true
+    },
+    "POCKET_SUFFIX": {
+      "required": true
+    },
+    "SENDGRID_API_KEY": {
+      "required": true
+    },
+    "SIMULATE_CHANNEL": {
+      "required": true
+    },
+    "SLACK_TOKEN": {
+      "required": true
+    },
+    "TO_EMAIL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "papertrail"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/php"
+    }
+  ]
+}
