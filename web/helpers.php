@@ -1,7 +1,6 @@
 <?php
 
 function r($aSomething,$aLabel='') {
-  $out = '';
   if ($aLabel) {
     $theLabel = "<b>".$aLabel."=</b>";
     //echo $someText;
@@ -18,8 +17,7 @@ function r($aSomething,$aLabel='') {
     $someText = "<p>".$theLabel."<b>".$aSomething."</b></p>";
   }
   echo $someText;
-  $out .= $someText;
-  return $out;
+  return $someText;
 }
 
 function mailIt($html,$fromEmail,$toEmail,$key) {
