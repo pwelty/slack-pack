@@ -3,3 +3,4 @@
 /web/.env
 /web/.htaccess
 /web/config.php
+.DS_Store
